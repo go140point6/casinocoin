@@ -67,8 +67,11 @@ Value importprivkey(const Array& params, bool fHelp)
             throw JSONRPCError(RPC_WALLET_ERROR, "Error adding key to wallet");
 
         if (fRescan) {
+            printf("Start scanning for wallet transactions, please wait, this may take a while.\n");
             pwalletMain->ScanForWalletTransactions(pindexGenesisBlock, true);
+            printf("Reaccepting wallet transactions.\n");
             pwalletMain->ReacceptWalletTransactions();
+            printf("Rescan done.\n");
         }
     }
 
