@@ -423,6 +423,26 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 
     // hardcoded $DATADIR/bootstrap.dat
     filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
+    
+    if (!filesystem::exists(pathBootstrap)) {
+        printf("Donwloading bootstrap.dat from casinocoin.org...\n");
+        CURL *curl;
+        FILE *fp;
+        CURLcode res;
+        char *url = "http://casinocoin.org/downloads/bootstrap.dat";
+        char outfilename[FILENAME_MAX] = pathBootstrap.string().c_str();
+        curl = curl_easy_init();
+        if (curl) {
+            fp = fopen(outfilename, "wb");
+            curl_easy_setopt(curl, CURLOPT_URL, url);
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+            res = curl_easy_perform(curl);
+            curl_easy_cleanup(curl);
+            fclose(fp);
+        }
+    }
+    
     if (filesystem::exists(pathBootstrap)) {
         FILE *file = fopen(pathBootstrap.string().c_str(), "rb");
         if (file) {
@@ -432,7 +452,7 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
             LoadExternalBlockFile(file);
             RenameOver(pathBootstrap, pathBootstrapOld);
         }
-    }
+    }    
 
     // -loadblock=
     BOOST_FOREACH(boost::filesystem::path &path, vImportFiles) {
