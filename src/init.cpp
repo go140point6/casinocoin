@@ -425,7 +425,7 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
     filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
     
     if (!filesystem::exists(pathBootstrap)) {
-        printf("Donwloading bootstrap.dat from casinocoin.org...\n");
+        printf("Downloading bootstrap.dat from casinocoin.org...\n");
         CURL *curl;
         FILE *fp;
         CURLcode res;
