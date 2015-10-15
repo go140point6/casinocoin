@@ -3,6 +3,11 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifdef QT_GUI
+#include <QApplication>
+#include <QProcess>
+#endif
+
 #include "txdb.h"
 #include "walletdb.h"
 #include "bitcoinrpc.h"
@@ -76,6 +81,85 @@ enum BindFlags {
 
 volatile bool fRequestShutdown = false;
 
+bool copyDir(
+    boost::filesystem::path const & source,
+    boost::filesystem::path const & destination
+)
+{
+    namespace fs = boost::filesystem;
+    try
+    {
+        // Check whether the function call is valid
+        if(
+            !fs::exists(source) ||
+            !fs::is_directory(source)
+        )
+        {
+            std::cerr << "Source directory " << source.string()
+                << " does not exist or is not a directory." << '\n'
+            ;
+            return false;
+        }
+        if(fs::exists(destination))
+        {
+            std::cerr << "Destination directory " << destination.string()
+                << " already exists." << '\n'
+            ;
+            return false;
+        }
+        // Create the destination directory
+        if(!fs::create_directory(destination))
+        {
+            std::cerr << "Unable to create destination directory"
+                << destination.string() << '\n'
+            ;
+            return false;
+        }
+    }
+    catch(fs::filesystem_error const & e)
+    {
+        std::cerr << e.what() << '\n';
+        return false;
+    }
+    // Iterate through the source directory
+    for(
+        fs::directory_iterator file(source);
+        file != fs::directory_iterator(); ++file
+    )
+    {
+        try
+        {
+            fs::path current(file->path());
+            if(fs::is_directory(current))
+            {
+                // Found directory: Recursion
+                if(
+                    !copyDir(
+                        current,
+                        destination / current.filename()
+                    )
+                )
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // Found file: Copy
+                fs::rename(
+                    current,
+                    destination / current.filename()
+                );
+            }
+        }
+        catch(fs::filesystem_error const & e)
+        {
+            std:: cerr << e.what() << '\n';
+        }
+    }
+    return true;
+}
+
 void StartShutdown()
 {
     fRequestShutdown = true;
@@ -98,10 +182,9 @@ void Shutdown()
     nTransactionsUpdated++;
     StopRPCThreads();
     ShutdownRPCMining();
+    StopNode();
     if (pwalletMain)
         bitdb.Flush(false);
-    GenerateBitcoins(false, NULL);
-    StopNode();
     {
         LOCK(cs_main);
         if (pwalletMain)
@@ -120,6 +203,43 @@ void Shutdown()
     UnregisterWallet(pwalletMain);
     if (pwalletMain)
         delete pwalletMain;
+#ifdef QT_GUI
+    if (fImporting && fRestart)
+    {
+        printf("Preparing blockchain files for loading after restart.\n");
+        if (boost::filesystem::exists(GetDataDir() / "bootstrap" / "blocks" / "blk00000.dat"))
+        {
+            try
+            {
+                // remove directories
+                boost::filesystem::remove_all(GetDataDir() / "blocks");
+                boost::filesystem::remove_all(GetDataDir() / "chainstate");
+                // copy contents over to data dir
+                copyDir(GetDataDir() / "bootstrap" / "blocks", GetDataDir() / "blocks");
+                copyDir(GetDataDir() / "bootstrap" / "chainstate", GetDataDir() / "chainstate");
+                // cleanup bootstrap
+                boost::filesystem::remove_all(GetDataDir() / "bootstrap");
+                // boost::filesystem::copy_directory(GetDataDir() / "bootstrap" / "blocks", GetDataDir() / "blocks");
+                // boost::filesystem::copy_directory(GetDataDir() / "bootstrap" / "chainstate", GetDataDir() / "chainstate");
+                // rename the extracted directories
+                // boost::filesystem::rename(GetDataDir() / "bootstrap" / "blocks", GetDataDir() / "blocks");
+                // boost::filesystem::rename(GetDataDir() / "bootstrap" / "chainstate", GetDataDir() / "chainstate");
+                RestartWallet("-listen=0 -bootstrap=1", true);
+            }
+            catch (std::exception &e) {
+                printf("Bootstrap shutdown filesystem error!\n");
+            }
+        }
+        else if (fRescan)
+        {
+            RestartWallet("-rescan", true);
+        }
+        else
+        {
+            RestartWallet(NULL, true);
+        }
+    }
+#endif
     printf("Shutdown : done\n");
 }
 
@@ -422,27 +542,7 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
     }
 
     // hardcoded $DATADIR/bootstrap.dat
-    filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
-    
-    if (!filesystem::exists(pathBootstrap)) {
-        printf("Downloading bootstrap.dat from casinocoin.org...\n");
-        CURL *curl;
-        FILE *fp;
-        CURLcode res;
-        char *url = "http://casinocoin.org/downloads/bootstrap.dat";
-        char outfilename[FILENAME_MAX] = pathBootstrap.string().c_str();
-        curl = curl_easy_init();
-        if (curl) {
-            fp = fopen(outfilename, "wb");
-            curl_easy_setopt(curl, CURLOPT_URL, url);
-            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-            curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-            res = curl_easy_perform(curl);
-            curl_easy_cleanup(curl);
-            fclose(fp);
-        }
-    }
-    
+    filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";    
     if (filesystem::exists(pathBootstrap)) {
         FILE *file = fopen(pathBootstrap.string().c_str(), "rb");
         if (file) {
@@ -461,6 +561,20 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
             CImportingNow imp;
             printf("Importing %s...\n", path.string().c_str());
             LoadExternalBlockFile(file);
+        }
+    }
+}
+
+void ThreadImportBootsrap()
+{
+    filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
+    if (filesystem::exists(pathBootstrap)) {
+        FILE *file = fopen(pathBootstrap.string().c_str(), "rb");
+        if (file) {
+            filesystem::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
+            printf("Importing bootstrap.dat...\n");
+            LoadExternalBlockFile(file);
+            RenameOver(pathBootstrap, pathBootstrapOld);
         }
     }
 }
@@ -1006,7 +1120,7 @@ bool AppInit2(boost::thread_group& threadGroup)
         uiInterface.InitMessage(_("Loading wallet..."));
 
         nStart = GetTimeMillis();
-        bool fFirstRun = true;
+        fFirstRun = true;
         pwalletMain = new CWallet("wallet.dat");
         DBErrors nLoadWalletRet = pwalletMain->LoadWallet(fFirstRun);
         if (nLoadWalletRet != DB_LOAD_OK)
@@ -1066,10 +1180,12 @@ bool AppInit2(boost::thread_group& threadGroup)
         printf(" wallet      %15"PRI64d"ms\n", GetTimeMillis() - nStart);
 
         RegisterWallet(pwalletMain);
-
         CBlockIndex *pindexRescan = pindexBest;
         if (GetBoolArg("-rescan"))
+        {
+            printf("Rescan, set rescan index to genesis block.\n");
             pindexRescan = pindexGenesisBlock;
+        }
         else
         {
             CWalletDB walletdb("wallet.dat");
@@ -1079,9 +1195,10 @@ bool AppInit2(boost::thread_group& threadGroup)
             else
                 pindexRescan = pindexGenesisBlock;
         }
-        if (pindexBest && pindexBest != pindexRescan)
+        printf("Restart after bootstrap? Prevent rescan: %i\n", GetBoolArg("-bootstrap"));
+        if (pindexBest && (pindexBest != pindexRescan) && !GetBoolArg("-bootstrap"))
         {
-            uiInterface.InitMessage(_("Rescanning..."));
+            uiInterface.InitMessage(_("Rescanning Blockchain, please wait ..."));
             printf("Rescanning last %i blocks (from block %i)...\n", pindexBest->nHeight - pindexRescan->nHeight, pindexRescan->nHeight);
             nStart = GetTimeMillis();
             pwalletMain->ScanForWalletTransactions(pindexRescan, true);
@@ -1163,3 +1280,38 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     return !fRequestShutdown;
 }
+
+#ifdef QT_GUI
+// Restart wallet
+void RestartWallet(const char *parm, bool fOldParms)
+{
+    QStringList newArgv(QApplication::instance()->arguments());
+    QString command;
+    command = newArgv[0];
+    if (!fOldParms)
+    {
+        newArgv.clear();
+    }
+    else
+    {
+        newArgv.removeFirst();
+    }
+    newArgv.append(QString("-restart"));
+    // remove rescan if in params
+    if ((fOldParms && mapArgs.count("-rescan")))
+        newArgv.removeOne(QString("-rescan"));
+    // add input params to new param list
+    if (parm)
+    {
+        printf("RestartWallet parameters: %s\n", parm);
+        QStringList slist;
+        slist = QString(parm).split(" ");
+        for (int x = 0; x <= slist.count()-1; x++) {
+            newArgv.append(slist.at(x));
+        }
+    }
+    // Spawn a new instance.
+    QProcess::startDetached(command, newArgv);
+    return;
+}
+#endif

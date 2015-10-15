@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QMap>
+#include <boost/thread.hpp>
 
 class TransactionTableModel;
 class WalletFrame;
@@ -18,7 +19,6 @@ class SendCoinsDialog;
 class SignVerifyMessageDialog;
 class Notificator;
 class RPCConsole;
-
 class CWallet;
 
 QT_BEGIN_NAMESPACE
@@ -45,6 +45,10 @@ public:
 
     explicit BitcoinGUI(QWidget *parent = 0);
     ~BitcoinGUI();
+
+    /** Set the thread group
+    */
+    void setThreadGroup(boost::thread_group& threadGroup);
 
     /** Set the client model.
         The client model represents the part of the core that communicates with the P2P network, and is wallet-agnostic.
@@ -77,6 +81,7 @@ protected:
 
 private:
     ClientModel *clientModel;
+    WalletModel *walletModel;
     WalletFrame *walletFrame;
 
     QLabel *labelEncryptionIcon;
@@ -161,6 +166,9 @@ public slots:
 
     /** Show incoming transaction notification for new transactions. */
     void incomingTransaction(const QString& date, int unit, qint64 amount, const QString& type, const QString& address);
+
+    /** Reload the blockchain from downloaded file **/
+    void reloadBlockchain(bool autoReload=false);
 
 private slots:
     /** Switch to overview (home) page */

@@ -148,6 +148,9 @@ extern bool fBloomFilters;
 extern bool fNoListen;
 extern bool fLogTimestamps;
 extern volatile bool fReopenDebugLog;
+extern bool fFirstRun;
+extern bool fRestart;
+extern bool fRescan;
 
 void RandAddSeed();
 void RandAddSeedPerfmon();

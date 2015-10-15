@@ -91,7 +91,7 @@ static void InitMessage(const std::string &message)
 {
     if(splashref)
     {
-        splashref->showMessage(QString::fromStdString(message), Qt::AlignBottom|Qt::AlignHCenter, QColor(55,55,55));
+        splashref->showMessage(QString::fromStdString(message), Qt::AlignBottom|Qt::AlignHCenter, QColor(255,255,255));
         qApp->processEvents();
     }
     printf("init message: %s\n", message.c_str());
@@ -151,6 +151,13 @@ int main(int argc, char *argv[])
         return 1;
     }
     ReadConfigFile(mapArgs, mapMultiArgs);
+    // Restarting
+    if (mapArgs.count("-restart")) {
+        // a wallet restart was issued
+        SoftSetBoolArg("-restart", true);
+//        printf("Restart Wallet, wait to give the old instance time to quit.\n");
+//        MilliSleep(7000); // give the old instance time to quit before starting again
+    }
 
     // Application identification (must be set before OptionsModel is initialized,
     // as it is used to locate QSettings)
@@ -236,6 +243,7 @@ int main(int argc, char *argv[])
         boost::thread_group threadGroup;
 
         BitcoinGUI window;
+
         guiref = &window;
 
         QTimer* pollShutdownTimer = new QTimer(guiref);
@@ -263,6 +271,17 @@ int main(int argc, char *argv[])
                 {
                     window.addWallet("~Default", walletModel);
                     window.setCurrentWallet("~Default");
+                }
+
+                // check if this is the first time we run or if the bootstrap option is supplied
+                if (fFirstRun || GetBoolArg("-vBootstrap")) // Force boostraping in auto mode
+                {
+                    if(!GetBoolArg("-testnet"))
+                    {
+                        // we go downloading the blockchain so set importing to true to prevent block download from peers
+                        fImporting = true;
+                        window.reloadBlockchain(true);
+                    }
                 }
 
                 // If -min option passed, start window minimized.

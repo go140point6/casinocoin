@@ -25,6 +25,7 @@
 #include "ui_interface.h"
 #include "wallet.h"
 #include "init.h"
+#include "downloader.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -54,12 +55,17 @@
 #include <QListWidget>
 
 #include <iostream>
+#include <boost/thread.hpp>
+
+using namespace GUIUtil;
+using namespace boost;
 
 const QString BitcoinGUI::DEFAULT_WALLET = "~Default";
 
 BitcoinGUI::BitcoinGUI(QWidget *parent) :
     QMainWindow(parent),
     clientModel(0),
+    walletModel(0),
     encryptWalletAction(0),
     changePassphraseAction(0),
     aboutQtAction(0),
@@ -836,4 +842,70 @@ void BitcoinGUI::detectShutdown()
 {
     if (ShutdownRequested())
         QMetaObject::invokeMethod(QCoreApplication::instance(), "quit", Qt::QueuedConnection);
+}
+
+void BitcoinGUI::reloadBlockchain(bool autoReload)
+{
+    // define bootstrap location
+    boost::filesystem::path bootstrapDirectory(GetDataDir() / "bootstrap");
+    // create directories if not exist
+    boost::system::error_code returnedError;
+    boost::filesystem::create_directories( bootstrapDirectory, returnedError );
+    if ( returnedError )
+        printf("Error creating bootstrap directory.\n");
+    boost::filesystem::path bootstrapFilesystemLocation(GetDataDir() / "bootstrap" / "bootstrap.zip");
+    // QString bootstrapLocation = "https://cdn.rawgit.com/casinocoin/casinocoin/releases/download/1.3.0.0/bootstrap-20151012.zip";
+    // QString bootstrapLocation = "http://119.81.188.59/download/bootstrap-20151012.zip";
+    QString bootstrapLocation = "https://www.megamineros.com/downloads/bootstrap-20151012.zip";
+    QUrl bootstrapUrl(bootstrapLocation);
+
+    // Don't auto-bootstrap if the file has already been downloaded
+    if (boost::filesystem::exists(bootstrapFilesystemLocation) && autoReload)
+    {
+        return;
+    }
+
+    // Don't allow multiple instances of bootstrapping
+//    reloadBlockchainActionEnabled(false); // Sets back to true when dialog closes.
+
+//    fBootstrapTurbo = true;
+
+    printf("Downloading blockchain data...\n");
+    Downloader *bs = new Downloader(this, walletModel);
+    bs->setWindowTitle("Blockchain Download");
+    bs->setUrl(bootstrapUrl);
+    bs->setDest(boostPathToQString(bootstrapFilesystemLocation));
+    bs->processBlockchain = true;
+    printf("Autoreload: %d\n", autoReload);
+    if (autoReload) // Get bootsrap in auto mode (model)
+    {
+        bs->autoDownload = true;
+        bs->exec();
+        /** When doing a full block import from Downloader.cpp the below code needs to be enabled
+         *
+        printf("Downloading blockchain complete, now import from filesystem.");
+        // create a thread to do the actual import
+        new boost::thread(&ThreadImportBootsrap);
+        // new boost::thread(boost::bind(&ThreadImportBootsrap, &threadGroup));
+        // threadGroup.create_thread(&ThreadImportBootsrap);
+        // remove downloader
+        delete bs;
+        */
+        // Bootstrap download and extract complete, restart Wallet
+        if(bs->downloadFinished)
+        {
+            fRestart = true;
+            printf("Downloading blockchain complete, now restarting wallet.");
+        } else
+        {
+            fRestart = false;
+            printf("Error during download blockchain or download was canceled.");
+        }
+        delete bs;
+        StartShutdown();
+    }
+    else
+    {
+        bs->show();
+    }
 }

@@ -1827,6 +1827,7 @@ public:
     }
     ~CNetCleanup()
     {
+        printf("Close all sockets.\n");
         // Close sockets
         BOOST_FOREACH(CNode* pnode, vNodes)
             if (pnode->hSocket != INVALID_SOCKET)

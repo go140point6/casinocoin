@@ -8,11 +8,14 @@
 #include "wallet.h"
 
 extern CWallet* pwalletMain;
-
 void StartShutdown();
 bool ShutdownRequested();
 void Shutdown();
 bool AppInit2(boost::thread_group& threadGroup);
 std::string HelpMessage();
+void ThreadImportBootsrap();
+#ifdef QT_GUI
+void RestartWallet(const char *parm, bool fOldParms = true);
+#endif
 
 #endif

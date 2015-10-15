@@ -1198,7 +1198,8 @@ unsigned int static GetNextWorkRequired_V1(const CBlockIndex* pindexLast, const 
 
     // Limit adjustment step
     int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
-    printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
+    if(!fImporting)
+        printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
     if (nActualTimespan < nTargetTimespan/4)
         nActualTimespan = nTargetTimespan/4;
     if (nActualTimespan > nTargetTimespan*4)
@@ -1214,11 +1215,13 @@ unsigned int static GetNextWorkRequired_V1(const CBlockIndex* pindexLast, const 
         bnNew = bnProofOfWorkLimit;
 
     /// debug print
-    printf("Difficulty Retarget - GetNextWorkRequired_V1 RETARGET\n");
-    printf("nTargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", nTargetTimespan, nActualTimespan);
-    printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
-    printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
-
+    if(!fImporting)
+    {
+        printf("Difficulty Retarget - GetNextWorkRequired_V1 RETARGET\n");
+        printf("nTargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", nTargetTimespan, nActualTimespan);
+        printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+        printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+    }
     return bnNew.GetCompact();
 }
 
@@ -1282,11 +1285,13 @@ unsigned int static KimotoGravityWell(const CBlockIndex* pindexLast, const CBloc
     if (bnNew > bnProofOfWorkLimit) { bnNew = bnProofOfWorkLimit; }
         
     /// debug print
-    printf("Difficulty Retarget - Kimoto Gravity Well RETARGET\n");
-    printf("PastRateAdjustmentRatio = %g\n", PastRateAdjustmentRatio);
-    printf("Before: %08x  %s\n", BlockLastSolved->nBits, CBigNum().SetCompact(BlockLastSolved->nBits).getuint256().ToString().c_str());
-    printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
-        
+    if(!fImporting)
+    {
+        printf("Difficulty Retarget - Kimoto Gravity Well RETARGET\n");
+        printf("PastRateAdjustmentRatio = %g\n", PastRateAdjustmentRatio);
+        printf("Before: %08x  %s\n", BlockLastSolved->nBits, CBigNum().SetCompact(BlockLastSolved->nBits).getuint256().ToString().c_str());
+        printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+    }
 	return bnNew.GetCompact();
 }
 
@@ -1349,9 +1354,8 @@ unsigned int static DigiShield(const CBlockIndex* pindexLast, const CBlockHeader
 
     // Limit adjustment step
     int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
-    printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
-
-
+    if(!fImporting)
+        printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
 
     CBigNum bnNew;
     bnNew.SetCompact(pindexLast->nBits);
@@ -1364,16 +1368,15 @@ unsigned int static DigiShield(const CBlockIndex* pindexLast, const CBlockHeader
     bnNew /= retargetTimespan;
     
     /// debug print
-    printf("DigiShield RETARGET \n");
-    printf("retargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", retargetTimespan, nActualTimespan);
-    printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
-    printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
-    
-
+    if(!fImporting)
+    {
+        printf("DigiShield RETARGET \n");
+        printf("retargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", retargetTimespan, nActualTimespan);
+        printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+        printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+    }
     if (bnNew > bnProofOfWorkLimit)
         bnNew = bnProofOfWorkLimit;
-
-
 
     return bnNew.GetCompact();
 }
@@ -2115,10 +2118,20 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     nBestChainWork = pindexNew->nChainWork;
     nTimeBestReceived = GetTime();
     nTransactionsUpdated++;
-    printf("SetBestChain: new best=%s  height=%d  log2_work=%.8g  tx=%lu  date=%s progress=%f\n",
-      hashBestChain.ToString().c_str(), nBestHeight, log(nBestChainWork.getdouble())/log(2.0), (unsigned long)pindexNew->nChainTx,
-      DateTimeStrFormat("%Y-%m-%d %H:%M:%S", pindexBest->GetBlockTime()).c_str(),
-      Checkpoints::GuessVerificationProgress(pindexBest));
+    if(!fImporting)
+    {
+        printf("SetBestChain: new best=%s  height=%d  log2_work=%.8g  tx=%lu  date=%s progress=%f\n",
+          hashBestChain.ToString().c_str(), nBestHeight, log(nBestChainWork.getdouble())/log(2.0), (unsigned long)pindexNew->nChainTx,
+          DateTimeStrFormat("%Y-%m-%d %H:%M:%S", pindexBest->GetBlockTime()).c_str(),
+          Checkpoints::GuessVerificationProgress(pindexBest));
+    }
+    else
+    {
+        if(nBestHeight % 1000 == 0)
+        {
+            printf("Blockchain import at height %d\n", nBestHeight);
+        }
+    }
 
     // Check the version of the last 100 blocks to see if we need to upgrade:
     if (!fIsInitialDownload)
@@ -2534,8 +2547,8 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
         }
         mapOrphanBlocksByPrev.erase(hashPrev);
     }
-
-    printf("ProcessBlock: ACCEPTED\n");
+    if(!fImporting)
+        printf("ProcessBlock: ACCEPTED\n");
     return true;
 }
 
