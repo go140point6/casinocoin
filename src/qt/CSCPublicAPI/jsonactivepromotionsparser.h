@@ -8,8 +8,6 @@
 
 #include "jsonsingleactivepromotion.h"
 
-class QmlImageProvider;
-
 class JsonActivePromotionsParser : public QJsonObject
 {
 public:
@@ -19,13 +17,11 @@ public:
 
 	const QList<JsonSingleActivePromotion>& GetPromotions() const;
 	QList<JsonSingleActivePromotion>& GetPromotions();
-
-	void AddImagesToPool( QmlImageProvider* a_pImageProvider );
-
 private:
+
 	void ResolvePromotionsArray();
 
-	QList<JsonSingleActivePromotion> m_aActivePromotions;
+	QList<JsonSingleActivePromotion> m_aActiveCasinos;
 };
 
 #endif // JSONACTIVEPROMOTIONSPARSER_H

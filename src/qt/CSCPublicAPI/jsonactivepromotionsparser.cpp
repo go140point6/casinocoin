@@ -1,5 +1,4 @@
 #include "jsonactivepromotionsparser.h"
-#include "../qtquick_controls/cpp/qmlimageprovider.h"
 
 #include <QDebug>
 
@@ -25,7 +24,7 @@ void JsonActivePromotionsParser::ResolvePromotionsArray()
 			{
 				if ( singleCasinoDescriptor.isObject() )
 				{
-					m_aActivePromotions.append( JsonSingleActivePromotion( singleCasinoDescriptor.toObject() ) );
+					m_aActiveCasinos.append( JsonSingleActivePromotion( singleCasinoDescriptor.toObject() ) );
 				}
 			}
 		}
@@ -34,21 +33,10 @@ void JsonActivePromotionsParser::ResolvePromotionsArray()
 
 const QList<JsonSingleActivePromotion>& JsonActivePromotionsParser::GetPromotions() const
 {
-	return m_aActivePromotions;
+	return m_aActiveCasinos;
 }
 
 QList<JsonSingleActivePromotion>& JsonActivePromotionsParser::GetPromotions()
 {
-	return m_aActivePromotions;
-}
-
-void JsonActivePromotionsParser::AddImagesToPool( QmlImageProvider* a_pImageProvider )
-{
-	if ( a_pImageProvider )
-	{
-		foreach( JsonSingleActivePromotion oPromotion, m_aActivePromotions )
-		{
-			a_pImageProvider->AddToImagePool( oPromotion.GetImageName(), oPromotion.GetAdvertImage() );
-		}
-	}
+	return m_aActiveCasinos;
 }

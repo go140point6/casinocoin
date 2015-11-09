@@ -46,11 +46,18 @@ GUIBannerListView
 			Image
 			{
 				id: id_advertisementImage
-				source: "image://advertImages/" + m_imageSource
+				source: m_imageSource
 				scale: ( id_listElement.width / width )
 				anchors.centerIn: id_listElement
 			}
 
+			// coming soon
+//			QmlImageProvider
+//			{
+//				id: id_advertisementImage
+//				scale: ( id_listElement.width / width )
+//				anchors.centerIn: id_listElement
+//			}
 			MouseArea
 			{
 				id: id_leftItemMouseArea

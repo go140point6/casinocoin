@@ -23,10 +23,7 @@ public:
 
 signals:
 	void signalResponseReady( const QByteArray& a_rJsonFile );
-	void signalNetworkError
-				( QNetworkReply::NetworkError a_eError
-				, const QUrl a_rFailedUrl
-				);
+	void signalNetworkError( QNetworkReply::NetworkError a_eError );
 
 public slots:
 	void slotParseNetworkResponse( QNetworkReply *finished );
