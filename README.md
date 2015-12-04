@@ -1,5 +1,5 @@
-<h2>Please download the updated wallet asap, hard fork incoming at block 546250</h2>
-[Click here to download the most recent wallet version -> 1.3.0 (Updated on July, 18 2014)](https://github.com/casinocoin/casinocoin/releases/tag/1.3.0.0 "Click to go to releases page")
+<h2>Wallet 2.0.0.0 Release available</h2>
+[Click here to download the most recent wallet version -> 2.0.0.0 (Updated on December, 3 2015)](https://github.com/casinocoin/casinocoin/releases/tag/2.0.0.0 "Click to go to releases page")
 
 <p align="center"><img src="https://raw.github.com/transcoder/CasinoCoin/master/src/qt/res/images/logo.png" /></p>
 

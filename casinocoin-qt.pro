@@ -1,13 +1,13 @@
 TEMPLATE = app
 TARGET = casinocoin-qt
 macx:TARGET = "CasinoCoin-Qt"
-VERSION = 1.3.0.0
+VERSION = 2.0.0.0
 INCLUDEPATH += src src/json src/qt
-QT += core gui network
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui network widgets qml quick
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE USE_IPV6 __NO_SYSTEM_INCLUDES
 CONFIG += no_include_pwd
 CONFIG += thread
+CONFIG += static
 
 # for boost 1.37, add -mt to the boost libraries
 # use: qmake BOOST_LIB_SUFFIX=-mt
@@ -259,7 +259,38 @@ HEADERS += src/qt/bitcoingui.h \
     src/threadsafety.h \
     src/limitedmap.h \
     src/qt/macnotificationhandler.h \
-    src/qt/splashscreen.h
+    src/qt/splashscreen.h \
+    src/qt/CSCPublicAPI/casinocoinwebapi.h \
+    src/qt/CSCPublicAPI/casinocoinwebapiparser.h \
+    src/qt/CSCPublicAPI/jsonactivepromotionsparser.h \
+    src/qt/CSCPublicAPI/jsonactiveexchangesparser.h \
+    src/qt/CSCPublicAPI/jsonsingleactivepromotion.h \
+    src/qt/CSCPublicAPI/jsonsingleactiveexchange.h \
+    src/qt/qtquick_controls/cpp/guibannercontrol.h \
+    src/qt/qtquick_controls/cpp/guibannerlistview.h \
+    src/qt/qtquick_controls/cpp/guibannerwidget.h \
+    src/qt/qtquick_controls/cpp/listiteminterface.h \
+    src/qt/qtquick_controls/cpp/qmlbannerlistitem.h \
+    src/qt/qtquick_controls/cpp/qmlbannerlistmodel.h \
+    src/qt/qtquick_controls/cpp/qmlimageprovider.h \
+    src/qt/qtquick_controls/cpp/qmllistitem.h \
+    src/qt/qtquick_controls/cpp/qmllistmodel.h \
+    src/qt/qtquick_controls/cpp/qmlmenutoolbarmodel.h \
+    src/qt/qtquick_controls/cpp/qmlmenutoolbaritem.h \
+    src/qt/qtquick_controls/cpp/guimenutoolbarwidget.h \
+    src/qt/qtquick_controls/cpp/guimenutoolbarlistview.h \
+    src/qt/qtquick_controls/cpp/guimenutoolbarcontrol.h \
+    src/qt/gui20_skin.h \
+    src/qt/cscfusionstyle.h \
+    src/qt/pryptopage.h \
+    src/qt/currencies.h \
+    src/qt/CSCPublicAPI/jsoncoininfoparser.h \
+    src/qt/infopage.h \
+    src/qt/qtquick_controls/cpp/guiexchangeswidget.h \
+    src/qt/qtquick_controls/cpp/qmlexchangeslistmodel.h \
+    src/qt/qtquick_controls/cpp/qmlexchangeslistitem.h \
+    src/qt/qtquick_controls/cpp/guiexchangeslistview.h \
+    src/qt/qtquick_controls/cpp/guiexchangescontrol.h
 
 SOURCES += src/qt/bitcoin.cpp \
     src/qt/bitcoingui.cpp \
@@ -330,7 +361,38 @@ SOURCES += src/qt/bitcoin.cpp \
     src/noui.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
-    src/qt/splashscreen.cpp
+    src/qt/splashscreen.cpp \
+    src/qt/CSCPublicAPI/casinocoinwebapi.cpp \
+    src/qt/CSCPublicAPI/casinocoinwebapiparser.cpp \
+    src/qt/CSCPublicAPI/jsonactivepromotionsparser.cpp \
+    src/qt/CSCPublicAPI/jsonactiveexchangesparser.cpp \
+    src/qt/CSCPublicAPI/jsonsingleactivepromotion.cpp \
+    src/qt/CSCPublicAPI/jsonsingleactiveexchange.cpp \
+    src/qt/qtquick_controls/cpp/guibannercontrol.cpp \
+    src/qt/qtquick_controls/cpp/guibannerlistview.cpp \
+    src/qt/qtquick_controls/cpp/guibannerwidget.cpp \
+    src/qt/qtquick_controls/cpp/qmlbannerlistitem.cpp \
+    src/qt/qtquick_controls/cpp/qmlbannerlistmodel.cpp \
+    src/qt/qtquick_controls/cpp/qmlimageprovider.cpp \
+    src/qt/qtquick_controls/cpp/qmllistitem.cpp \
+    src/qt/qtquick_controls/cpp/qmllistmodel.cpp \
+    src/qt/qtquick_controls/cpp/qmlmenutoolbarmodel.cpp \
+    src/qt/qtquick_controls/cpp/qmlmenutoolbaritem.cpp \
+    src/qt/qtquick_controls/cpp/guimenutoolbarwidget.cpp \
+    src/qt/qtquick_controls/cpp/guimenutoolbarlistview.cpp \
+    src/qt/qtquick_controls/cpp/guimenutoolbarcontrol.cpp \
+    src/qt/gui20_skin.cpp \
+    src/qt/cscfusionstyle.cpp \
+    src/qt/pryptopage.cpp \
+    src/qt/currencies.cpp \
+    src/qt/CSCPublicAPI/jsoncoininfoparser.cpp \
+    src/qt/infopage.cpp \
+    src/qt/qtquick_controls/cpp/guiexchangeswidget.cpp \
+    src/qt/qtquick_controls/cpp/qmlexchangeslistmodel.cpp \
+    src/qt/qtquick_controls/cpp/qmlexchangeslistitem.cpp \
+    src/qt/qtquick_controls/cpp/guiexchangeslistview.cpp \
+    src/qt/qtquick_controls/cpp/guiexchangescontrol.cpp
+
 
 RESOURCES += src/qt/bitcoin.qrc
 
@@ -345,7 +407,9 @@ FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/sendcoinsentry.ui \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
-    src/qt/forms/optionsdialog.ui
+    src/qt/forms/optionsdialog.ui \
+    src/qt/forms/pryptopage.ui \
+    src/qt/forms/infopage.ui
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h
@@ -403,7 +467,16 @@ OTHER_FILES += README.md \
     src/test/*.cpp \
     src/test/*.h \
     src/qt/test/*.cpp \
-    src/qt/test/*.h
+    src/qt/test/*.h \
+    src/qt/qtquick_controls/qml/QmlGUIBannerControl.qml \
+    src/qt/qtquick_controls/qml/QmlGUIBannerListView.qml \
+    src/qt/qtquick_controls/qml/QmlGUIBannerWindow.qml \
+    src/qt/qtquick_controls/qml/QmlGUIExchangesControl.qml \
+    src/qt/qtquick_controls/qml/QmlGUIExchangesListView.qml \
+    src/qt/qtquick_controls/qml/QmlGUIExchangesWindow.qml \
+    src/qt/qtquick_controls/qml/QmlGUIMenuToolbarWindow.qml \
+    src/qt/qtquick_controls/qml/QmlGUIMenuToolbarListView.qml \
+    src/qt/qtquick_controls/qml/QmlGUIMenuToolbarControl.qml
 
 # platform specific defaults, if not overridden on command line
 isEmpty(BOOST_LIB_SUFFIX) {
@@ -484,3 +557,6 @@ contains(RELEASE, 1) {
 }
 
 system($$QMAKE_LRELEASE -silent $$TRANSLATIONS)
+
+DISTFILES += \
+    QmlImports.qml
