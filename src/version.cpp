@@ -40,8 +40,13 @@ const std::string CLIENT_NAME("digishield");
 #    define GIT_COMMIT_DATE ""
 #endif
 
+#ifdef QT_GUI
 #define BUILD_DESC_FROM_COMMIT(maj,min,rev,build,commit) \
     "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) "-Qt" commit
+#else
+#define BUILD_DESC_FROM_COMMIT(maj,min,rev,build,commit) \
+    "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) commit
+#endif
 
 #define BUILD_DESC_FROM_UNKNOWN(maj,min,rev,build) \
     "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) "-unk"
