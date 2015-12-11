@@ -21,7 +21,7 @@ public:
     QString getDescription() const{ return m_strDescription; }
     double  getLastBidPriceBTC() const{ return m_dblLastBidPriceBTC; }
     double  getLastAskPriceBTC() const{ return m_dblLastAskPriceBTC; }
-    double  getLastPriceBTC() const{ return m_dblLastBidPriceBTC; }
+    double  getLastPriceBTC() const{ return m_dblLastPriceBTC; }
     double  getVolume24H() const{ return m_dblVolume24H; }
     QString getLastUpdateTime() const{ return m_strLastUpdateTime; }
 
