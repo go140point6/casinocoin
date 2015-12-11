@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Casinocoin Wallet"
-!define PRODUCT_VERSION "2.0.0.0"
+!define PRODUCT_VERSION "2.0.1.0"
 !define PRODUCT_PUBLISHER "Casinocoin"
 !define PRODUCT_WEB_SITE "http://www.casinocoin.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\casinocoin-qt.exe"
@@ -47,7 +47,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "release\casinocoin-2.0.0.0-setup.exe"
+OutFile "release\casinocoin-2.0.1.0-setup.exe"
 InstallDir "$PROGRAMFILES\Casinocoin"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -76,6 +76,7 @@ Section "MainSection" SEC01
   File "release\plugins\imageformats\qwebp.dll"
   SetOutPath "$INSTDIR\plugins\platforms"
   File "release\plugins\platforms\qwindows.dll"
+  File "release\plugins\platforms\qminimal.dll"
   SetOutPath "$INSTDIR\qml\QtQml\Models.2"
   File "release\qml\QtQml\Models.2\modelsplugin.dll"
   File "release\qml\QtQml\Models.2\plugins.qmltypes"
@@ -658,6 +659,7 @@ Section Uninstall
   Delete "$INSTDIR\qml\QtQml\Models.2\plugins.qmltypes"
   Delete "$INSTDIR\qml\QtQml\Models.2\modelsplugin.dll"
   Delete "$INSTDIR\plugins\platforms\qwindows.dll"
+  Delete "$INSTDIR\plugins\platforms\qminimal.dll"
   Delete "$INSTDIR\plugins\imageformats\qwebp.dll"
   Delete "$INSTDIR\plugins\imageformats\qwbmp.dll"
   Delete "$INSTDIR\plugins\imageformats\qtiff.dll"
