@@ -29,7 +29,7 @@ public:
     //! symbol
     static QString symbol(int currency);
     //! Format value
-    static QString format(int currency, double value, bool symbol);
+    static QString format(int currency, double value, bool symbol, int decimals, bool isSatoshi);
 
     //! @name AbstractListModel implementation
     //! List model for currency drop-down selection box.

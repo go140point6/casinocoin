@@ -410,7 +410,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="4" column="0">
          <widget class="QLabel" name="lblConnections">
           <property name="styleSheet">
            <string notr="true"/>
@@ -423,7 +423,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="1">
          <widget class="QLabel" name="txtConnections">
           <property name="font">
            <font>
@@ -442,7 +442,7 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+        <item row="5" column="0">
          <widget class="QLabel" name="lblDifficulty">
           <property name="styleSheet">
            <string notr="true"/>
@@ -455,7 +455,7 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
+        <item row="5" column="1">
          <widget class="QLabel" name="txtDifficulty">
           <property name="font">
            <font>
@@ -474,7 +474,7 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="6" column="0">
          <widget class="QLabel" name="lblHashRate">
           <property name="styleSheet">
            <string notr="true"/>
@@ -487,7 +487,7 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
+        <item row="6" column="1">
          <widget class="QLabel" name="txtHashRate">
           <property name="font">
            <font>
@@ -506,7 +506,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="7" column="0">
          <widget class="QLabel" name="lblTransactionCount">
           <property name="styleSheet">
            <string notr="true"/>
@@ -519,7 +519,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="7" column="1">
          <widget class="QLabel" name="txtTransactionCount">
           <property name="font">
            <font>
@@ -535,6 +535,26 @@
           </property>
           <property name="wordWrap">
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="lblCoinFiatValue">
+          <property name="text">
+           <string>Coin Fiat Value</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="txtCoinFiatValue">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>-</string>
           </property>
          </widget>
         </item>

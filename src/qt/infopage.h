@@ -22,6 +22,8 @@ public slots:
     void setNumBlocks(int count, int countOfPeers);
     /** Set number of transactions shown in the UI */
     void setNumTransactions(int count);
+    /** Set Fiat coin value */
+    void setCoinFiatValue(const QString coinValue);
 
 public:
     explicit InfoPage(QWidget *parent = 0);

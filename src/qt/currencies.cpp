@@ -73,10 +73,14 @@ QString Currencies::symbol(int currency)
     }
 }
 
-QString Currencies::format(int currency, double value, bool useSymbol)
+QString Currencies::format(int currency, double value, bool useSymbol, int decimals, bool isSatoshi)
 {
     // divide by satoshi
-    double fiatValue = value * 0.00000001;
+    double fiatValue = value;
+    if(isSatoshi)
+    {
+        fiatValue *= 0.00000001;
+    }
     QString formattedValue = "";
     if(useSymbol)
     {
@@ -84,7 +88,7 @@ QString Currencies::format(int currency, double value, bool useSymbol)
     }
     // apply format
     QLocale::setDefault( QLocale(QLocale::English, QLocale::UnitedStates) );
-    formattedValue.append(QString("%L1").arg(fiatValue, 0, 'f', 2)).append(" ").append(name(currency));
+    formattedValue.append(QString("%L1").arg(fiatValue, 0, 'f', decimals)).append(" ").append(name(currency));
     return formattedValue;
 }
 

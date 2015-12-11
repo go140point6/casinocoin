@@ -6,7 +6,7 @@
 #include <QDateTime>
 #include "bitcoinunits.h"
 #include "main.h"
-
+#include "overviewpage.h"
 #include "qtquick_controls/cpp/guiexchangeswidget.h"
 
 using namespace std;
@@ -17,9 +17,8 @@ InfoPage::InfoPage(QWidget *parent) :
 	exchangesWidget( 0 )
 {
     ui->setupUi(this);
-//    ui->casinoInfoBox->setVisible(false);
-//    ui->newsItemsBox->setVisible(false);
-
+    ui->coinInfoBox->setMinimumHeight(250);
+    ui->exchangeInfoBox->setMinimumHeight(250);
 	createExchangesWidget();
 }
 
@@ -118,4 +117,9 @@ void InfoPage::createExchangesWidget()
 	exchangesWidget = new GUIExchangesWidget( this );
 	exchangesWidget->slotPopulateExchangesFromWeb();
 	ui->verticalLayoutExchanges->addWidget( exchangesWidget->dockQmlToWidget() );
+}
+
+void InfoPage::setCoinFiatValue(QString coinValue)
+{
+    ui->txtCoinFiatValue->setText(coinValue);
 }

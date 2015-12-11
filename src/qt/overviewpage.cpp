@@ -125,6 +125,7 @@ OverviewPage::OverviewPage(QWidget *parent) :
     ui->listTransactions->setItemDelegate(txdelegate);
     ui->listTransactions->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
     ui->listTransactions->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
+    ui->listTransactions->setMinimumWidth(350);
     ui->listTransactions->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     connect(ui->listTransactions, SIGNAL(clicked(QModelIndex)), this, SLOT(handleTransactionClicked(QModelIndex)));
@@ -277,8 +278,13 @@ void OverviewPage::updateFiatBalance(int currency)
     {
         QString conversionCurrency = QString("Price").append(Currencies::name(currency));
         double currencyValue = coinInformation.find(conversionCurrency).value().toDouble();
+        // emit signal for change value
+        QString coinValue = Currencies::format(currency, currencyValue, true, 4, false);
+        emit coinFiatValueChanged(coinValue);
+        // calculate and set fiat balance
         double fiatBalance = currentBalance * currencyValue;
-        ui->labelBalanceFiat->setText(Currencies::format(currency,fiatBalance,true));
+        QString fiatBalanceString = Currencies::format(currency,fiatBalance,true, 2, true);
+        ui->labelBalanceFiat->setText(fiatBalanceString);
     }
 }
 

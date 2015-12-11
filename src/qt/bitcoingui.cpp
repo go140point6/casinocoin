@@ -473,7 +473,7 @@ void BitcoinGUI::restoreWindowGeometry()
 {
     QSettings settings;
     QPoint pos = settings.value("nWindowPos").toPoint();
-    QSize size = settings.value("nWindowSize", QSize(850, 550)).toSize();
+    QSize size = settings.value("nWindowSize", QSize(900, 650)).toSize();
     if (!pos.x() && !pos.y())
     {
         QRect screen = QApplication::desktop()->screenGeometry();
