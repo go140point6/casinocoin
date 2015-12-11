@@ -83,7 +83,7 @@ QWidget* GUIExchangesWidget::dockQmlToWidget()
 		pPlaceHolder = QWidget::createWindowContainer( pExchangesWindow, this );
 		if ( pPlaceHolder )
 		{
-            pPlaceHolder->setMinimumSize( 500, 200 );
+            pPlaceHolder->setMinimumSize( 500, 170 );
 			pPlaceHolder->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 		}
 	}
