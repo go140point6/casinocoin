@@ -139,8 +139,13 @@ OverviewPage::OverviewPage(QWidget *parent) :
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
 
-    // get CoinInfo from the web
+    // get CoinInfo on startup
     getCoinInfo();
+    // start timer to get CoinInfo from the web every interval
+    coinInfoRefreshTimer.setSingleShot( false );
+    coinInfoRefreshTimer.setInterval( 1000 * 300 ); // every 5 minuts
+    connect( &coinInfoRefreshTimer, SIGNAL( timeout() ), this, SLOT(getCoinInfo()), Qt::UniqueConnection );
+    coinInfoRefreshTimer.start();
 }
 
 void OverviewPage::handleTransactionClicked(const QModelIndex &index)

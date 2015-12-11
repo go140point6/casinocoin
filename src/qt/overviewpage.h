@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QJsonObject>
+#include <QTimer>
 
 namespace Ui {
     class OverviewPage;
@@ -56,8 +57,8 @@ private:
     /** Get the CoinInfo from REST service */
     CasinoCoinWebAPIParser* cscWebApiParser;
     CasinoCoinWebAPI* cscWebApi;
-    void getCoinInfo();
     QJsonObject coinInformation;
+    QTimer coinInfoRefreshTimer;
 
 private slots:
     void updateDisplayUnit();
@@ -66,6 +67,7 @@ private slots:
     void updateCoinInfoFromWeb( JsonCoinInfoParser* coinInfoParser );
     void updateFiatBalance(int currency);
     void updateDisplayPromotions(bool checked);
+    void getCoinInfo();
 };
 
 #endif // OVERVIEWPAGE_H
