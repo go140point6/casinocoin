@@ -40,6 +40,7 @@ class GUI20Skin : public QObject
 	Q_PROPERTY( QColor colorTextActiveAutocomplete			READ GetColorTextActiveAutocomplete				CONSTANT )
 	Q_PROPERTY( QColor colorTextDisabled					READ GetColorTextDisabled						CONSTANT )
 	Q_PROPERTY( QColor colorTextDisabledAutocomplete		READ GetColorTextDisabledAutocomplete			CONSTANT )
+    Q_PROPERTY( QColor colorTextBlack               		READ GetColorTextBlack              			CONSTANT )
 
 	Q_ENUMS( ESizeConstants )
 
@@ -80,6 +81,7 @@ public:
 	const QColor GetColorTextActiveAutocomplete() const			{return colorTextActiveAutocomplete;}
 	const QColor GetColorTextDisabled() const					{return colorTextDisabled;}
 	const QColor GetColorTextDisabledAutocomplete() const		{return colorTextDisabledAutocomplete;}
+    const QColor GetColorTextBlack() const                      {return colorTextBlack;}
 
 private:
 	const QColor colorToolbarMainGradientBegin;
