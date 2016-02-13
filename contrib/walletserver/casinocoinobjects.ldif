@@ -1,0 +1,15 @@
+dn: ou=Users,dc=casinocoin,dc=org
+objectClass: organizationalUnit
+ou: Users
+
+dn: ou=Groups,dc=casinocoin,dc=org
+objectClass: organizationalUnit
+ou: Groups
+
+dn: ou=WalletUsers,ou=Groups,dc=casinocoin,dc=org
+objectClass: organizationalUnit
+ou: WalletUsers
+
+dn: ou=WalletApplications,ou=Groups,dc=casinocoin,dc=org
+objectClass: organizationalUnit
+ou: WalletApplications

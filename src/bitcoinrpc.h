@@ -64,6 +64,9 @@ enum RPCErrorCode
     RPC_WALLET_WRONG_ENC_STATE      = -15, // Command given in wrong wallet encryption state (encrypting an encrypted wallet etc.)
     RPC_WALLET_ENCRYPTION_FAILED    = -16, // Failed to encrypt the wallet
     RPC_WALLET_ALREADY_UNLOCKED     = -17, // Wallet is already unlocked
+
+    // Wallet Server errors
+    RPC_WALLETSERVER_INVALID_ID     = -100, // Given identifier is already in a session
 };
 
 json_spirit::Object JSONRPCError(int code, const std::string& message);
@@ -207,5 +210,6 @@ extern json_spirit::Value gettxout(const json_spirit::Array& params, bool fHelp)
 extern json_spirit::Value verifychain(const json_spirit::Array& params, bool fHelp);
 
 extern json_spirit::Value getcoinsupply(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value startwalletserversession(const json_spirit::Array& params, bool fHelp);
 
 #endif

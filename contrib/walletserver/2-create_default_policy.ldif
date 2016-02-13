@@ -1,0 +1,5 @@
+dn: ou=Policies,dc=casinocoin,dc=org
+objectClass: top
+objectClass: organizationalUnit
+ou: Policies
+description: Default password policies container

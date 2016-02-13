@@ -15,6 +15,7 @@
 #include "ui_interface.h"
 #include "paymentserver.h"
 #include "splashscreen.h"
+#include "walletserver.h"
 
 #include <QMessageBox>
 #if QT_VERSION < 0x050000
@@ -296,6 +297,7 @@ int main(int argc, char *argv[])
         }
         else
         {
+            // Shutdown the core and its threads
             threadGroup.interrupt_all();
             threadGroup.join_all();
             Shutdown();

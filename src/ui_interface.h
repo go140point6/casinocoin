@@ -93,6 +93,9 @@ public:
      * @note called with lock cs_mapAlerts held.
      */
     boost::signals2::signal<void (const uint256 &hash, ChangeType status)> NotifyAlertChanged;
+
+    /** Signal to create new Wallet Server session. */
+    boost::signals2::signal<void (std::string accountId, std::string sessionId)> NotifyStartNewWalletServerSession;
 };
 
 extern CClientUIInterface uiInterface;

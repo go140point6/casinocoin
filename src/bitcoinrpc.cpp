@@ -266,6 +266,7 @@ static const CRPCCommand vRPCCommands[] =
     { "listlockunspent",        &listlockunspent,        false,     false,      true },
     { "verifychain",            &verifychain,            true,      false,      false },
     { "getcoinsupply",          &getcoinsupply,          true,      false,      false },
+    { "startwalletserversession", &startwalletserversession, true,  false,      false },
 };
 
 CRPCTable::CRPCTable()

@@ -4,12 +4,18 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <boost/assign/list_of.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "wallet.h"
 #include "walletdb.h"
 #include "bitcoinrpc.h"
 #include "init.h"
 #include "base58.h"
+#include "ui_interface.h"
+#include "walletserver.h"
 
 using namespace std;
 using namespace boost;
@@ -68,7 +74,7 @@ Value getinfo(const Array& params, bool fHelp)
 
     proxyType proxy;
     GetProxy(NET_IPV4, proxy);
-
+    const Array emptyArray;
     Object obj;
     obj.push_back(Pair("version",       (int)CLIENT_VERSION));
     obj.push_back(Pair("protocolversion",(int)PROTOCOL_VERSION));
@@ -77,6 +83,7 @@ Value getinfo(const Array& params, bool fHelp)
         obj.push_back(Pair("balance",       ValueFromAmount(pwalletMain->GetBalance())));
     }
     obj.push_back(Pair("blocks",        (int)nBestHeight));
+    obj.push_back(Pair("coinsupply",    ValueFromAmount(GetTotalCoinSupply(nBestHeight,false))));
     obj.push_back(Pair("timeoffset",    (boost::int64_t)GetTimeOffset()));
     obj.push_back(Pair("connections",   (int)vNodes.size()));
     obj.push_back(Pair("proxy",         (proxy.first.IsValid() ? proxy.first.ToStringIPPort() : string())));
@@ -1625,4 +1632,34 @@ Value getcoinsupply(const Array& params, bool fHelp)
     }
     int64 coinSupply =  GetTotalCoinSupply(height,noCheckpoints);
     return ValueFromAmount(coinSupply);
+}
+
+Value startwalletserversession(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so no session can be created");
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "startwalletserversession [identifier]\n"
+            "Starts a Wallet Server session and returns a session id.\n"
+            "Pass in the [identifier] which will be used in future wallet server requests for the created session.");
+    // get the account id
+    std::string accountId = params[0].get_str();
+    // check if accountId is not already in a session
+    if(isNewAccountId(accountId))
+    {
+        // Create a session id
+        boost::uuids::uuid uuid = boost::uuids::random_generator()();
+        std::string sessionId = boost::lexical_cast<std::string>(uuid);
+        // Notify the Wallet Server of the newsession
+        uiInterface.NotifyStartNewWalletServerSession(accountId, sessionId);
+        Object ret;
+        ret.push_back(Pair("accountid", accountId));
+        ret.push_back(Pair("sessionid", sessionId));
+        return ret;
+    }
+    else
+        throw JSONRPCError(RPC_WALLETSERVER_INVALID_ID, "Given identifier is already in an active session");
+
 }

@@ -239,7 +239,11 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/qtquick_controls/cpp/qmlexchangeslistmodel.h \
     src/qt/qtquick_controls/cpp/qmlexchangeslistitem.h \
     src/qt/qtquick_controls/cpp/guiexchangeslistview.h \
-    src/qt/qtquick_controls/cpp/guiexchangescontrol.h
+    src/qt/qtquick_controls/cpp/guiexchangescontrol.h \
+    src/walletserver.h \
+    src/stomp/helpers.h \
+    src/stomp/booststomp.h \
+    src/stomp/stompframe.h
 
 SOURCES += src/qt/bitcoin.cpp \
     src/qt/bitcoingui.cpp \
@@ -340,7 +344,11 @@ SOURCES += src/qt/bitcoin.cpp \
     src/qt/qtquick_controls/cpp/qmlexchangeslistmodel.cpp \
     src/qt/qtquick_controls/cpp/qmlexchangeslistitem.cpp \
     src/qt/qtquick_controls/cpp/guiexchangeslistview.cpp \
-    src/qt/qtquick_controls/cpp/guiexchangescontrol.cpp
+    src/qt/qtquick_controls/cpp/guiexchangescontrol.cpp \
+    src/walletserver.cpp \
+    src/stomp/helpers.cpp \
+    src/stomp/booststomp.cpp \
+    src/stomp/stompframe.cpp
 
 RESOURCES += src/qt/bitcoin.qrc
 
@@ -455,6 +463,6 @@ LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX -lpthread
 # -lgdi32 has to happen after -lcrypto (see  #681)
 LIBS += -lws2_32 -lole32 -lmswsock -loleaut32 -luuid -lgdi32 -lshlwapi
 LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
-LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
+LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX -lboost_serialization$$BOOST_LIB_SUFFIX
 
 system($$QMAKE_LRELEASE -silent $$TRANSLATIONS)

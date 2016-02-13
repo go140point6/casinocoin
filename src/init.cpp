@@ -10,6 +10,7 @@
 #include "init.h"
 #include "util.h"
 #include "ui_interface.h"
+#include "walletserver.h"
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -27,6 +28,7 @@ using namespace boost;
 
 CWallet* pwalletMain;
 CClientUIInterface uiInterface;
+boost::thread walletServerThread;
 
 #ifdef WIN32
 // Win32 LevelDB doesn't use filedescriptors, and the ones used for
@@ -78,6 +80,9 @@ volatile bool fRequestShutdown = false;
 
 void StartShutdown()
 {
+    // Stop WalletServer if running
+    StopWalletServerThread();
+    // initiate shutdown
 	boost::this_thread::sleep_for( boost::chrono::seconds( 1 ) );
     fRequestShutdown = true;
 }
@@ -226,7 +231,9 @@ bool AppInit(int argc, char* argv[])
                 fprintf(stderr, "Error: setsid() returned %d errno %d\n", sid, errno);
         }
 #endif
-
+        // WalletServer parameter
+        fWalletServer = GetBoolArg("-walletserver");
+        // create the thread to detect a shutdown
         detectShutdownThread = new boost::thread(boost::bind(&DetectShutdownThread, &threadGroup));
         fRet = AppInit2(threadGroup);
     }
@@ -1129,6 +1136,13 @@ bool AppInit2(boost::thread_group& threadGroup)
     // Generate coins in the background
     if (pwalletMain)
         GenerateBitcoins(GetBoolArg("-gen", false), pwalletMain);
+
+    // Start The WalletServer if defined
+    fWalletServer = GetBoolArg("-walletserver", false);
+    if (fWalletServer)
+    {
+        threadGroup.create_thread(boost::bind(&StartWalletServerThread));
+    }
 
     // ********************************************************* Step 12: finished
 

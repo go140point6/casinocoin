@@ -45,6 +45,7 @@ LIBS= \
  -l boost_program_options$(BOOST_SUFFIX) \
  -l boost_thread$(BOOST_SUFFIX) \
  -l boost_chrono$(BOOST_SUFFIX) \
+ -l boost_serialization$(BOOST_SUFFIX) \
  -l db_cxx \
  -l ssl \
  -l crypto
@@ -72,7 +73,8 @@ endif
 LIBS += -l mingwthrd -l kernel32 -l user32 -l gdi32 -l comdlg32 -l winspool -l winmm -l shell32 -l comctl32 -l ole32 -l oleaut32 -l uuid -l rpcrt4 -l advapi32 -l ws2_32 -l mswsock -l shlwapi -l pthread
 
 # TODO: make the mingw builds smarter about dependencies, like the linux/osx builds are
-HEADERS = $(wildcard *.h)
+HEADERS = $(wildcard *.h) \
+          stomp/$(wildcar *.h)
 
 OBJS= \
     leveldb/libleveldb.a \
@@ -106,7 +108,11 @@ OBJS= \
     obj/bloom.o \
     obj/noui.o \
     obj/leveldb.o \
-    obj/txdb.o
+    obj/txdb.o \
+	obj/stomp/helpers.o \
+	obj/stomp/booststomp.o \
+	obj/stomp/stompframe.o \
+	obj/walletserver.o
 
 ifdef USE_SSE2
 DEFS += -DUSE_SSE2
@@ -132,6 +138,7 @@ obj/%-sse2.o: %-sse2.cpp
 	$(CXX) -c $(CFLAGS) -msse2 -mstackrealign -o $@ $<
 
 obj/%.o: %.cpp $(HEADERS)
+	mkdir -p obj/stomp
 	$(CXX) -c $(CFLAGS) -o $@ $<
 
 casinocoind.exe: $(OBJS:obj/%=obj/%)
