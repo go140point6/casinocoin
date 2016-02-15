@@ -24,7 +24,7 @@ http://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License
 
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
-#include "BoostStomp.h"
+#include "booststomp.h"
 #include "helpers.h"
 
 namespace STOMP {
