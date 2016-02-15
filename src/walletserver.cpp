@@ -1,3 +1,4 @@
+#include <fstream>
 #include "walletserver.h"
 #include "main.h"
 #include "util.h"
