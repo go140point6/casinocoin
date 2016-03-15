@@ -54,7 +54,7 @@ If you are a community mber interested in more general announcements related to 
 Links
 ======
 
-Website: http://casinocoin.org
+Website: https://casinocoin.org
 
 Source: https://github.com/casinocoin/casinocoin
 
