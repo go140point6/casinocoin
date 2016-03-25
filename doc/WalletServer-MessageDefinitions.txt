@@ -1,0 +1,231 @@
+--
+-- Create Wallet
+--
+Request:
+{
+	"command" : "createwallet",
+	"accountid" : "andre@jochems.com",
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"arguments" : {
+		"passphrase" : "mywalletsecret"
+	}
+}
+
+Response:
+{
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"result" : {
+		"errorCode" : 0,
+		"errorMessage" : "",
+		"walletid" : "517beddb-8de2-4112-8aad-9e4d627916aa"
+	}
+}
+
+--
+-- Open Wallet
+--
+Request:
+{
+	"command" : "openwallet",
+	"accountid" : "andre@jochems.com",
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"arguments" : {
+		"walletid" : "517beddb-8de2-4112-8aad-9e4d627916aa",
+		"passphrase" : "mywalletsecret"
+	}
+}
+
+Response:
+{
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"result" : {
+		"errorCode" : 0,
+		"errorMessage" : ""
+	}
+}
+
+--
+-- Close Wallet
+--
+Request:
+{
+	"command" : "closewallet",
+	"accountid" : "andre@jochems.com",
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"arguments" : {
+		"walletid" : "517beddb-8de2-4112-8aad-9e4d627916aa"
+	}
+}
+
+Response:
+{
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"result" : {
+		"errorCode" : 0,
+		"errorMessage" : ""
+	}
+}
+
+--
+-- Get Wallet Info
+--
+Request:
+{
+	"command" : "getinfo",
+	"accountid" : "andre@jochems.com",
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"arguments" : {
+		"walletid" : "517beddb-8de2-4112-8aad-9e4d627916aa"
+	}
+}
+
+Response:
+{
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"result" : {
+		"errorCode" : 0,
+		"errorMessage" : "",
+		"balance" : 250.412323212,
+		"blocks" : 1377377,
+		"difficulty" : 21.41622924,
+		"keypoololdest" : 1445349028,
+		"keypoolsize" : 101,
+		"lastTransactions" : [
+			{ "txid" : "4378c3ffe1459bd5ff04ef19c9d56cfecaad45ae3bb0661768b42f9a40952bfa",
+			  "address" : "CT8YNXrn4EmPXTin4ecMtuWu1gvvUQuEKH",
+			  "category" : "receive",
+			  "amount" : 0.90000000,
+			  "confirmations" : 52920,
+			  "blockhash" : "96b0885392d5b316e3cdb4fe9be0327790f7135f517ca38e50d9b4f8599d85b6",
+			  "blockindex" : 1,
+			  "blocktime" : 1454950142,
+			  "time" : 1454950116,
+			  "timereceived" : 1454950116
+			},
+			{ "txid" : "610157549d6c2f62809ad245134e5cdbc38e2738907daf376e71f523d3b99e8a",
+			  "address" : "CVXzfjz3q1x3K8AeuCmhZ5cHK3ZzDgzURV",
+			  "category" : "send",
+			  "amount" : -1.00000000,
+			  "fee" : -0.00100000,
+			  "confirmations" : 66137,
+			  "blockhash" : "7fd6b63c8f6c7e2b8bc48935efa560a50d16a1733c69c0a1c66e49a8ba44c1be",
+			  "blockindex" : 1,
+			  "blocktime" : 1454405676,
+			  "time" : 1454405608,
+			  "timereceived" : 1454405608
+			}
+		]
+	}
+}
+
+--
+-- Get Wallet Transactions
+--
+Request:
+{
+	"command" : "listtransactions",
+	"accountid" : "andre@jochems.com",
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"arguments" : {
+		"walletid" : "517beddb-8de2-4112-8aad-9e4d627916aa",
+		"count" : 10,
+		"from" : 0
+	}
+}
+
+Response:
+{
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"result" : {
+		"errorCode" : 0,
+		"errorMessage" : "",
+		"indexFrom" : 0,
+		"indexTo" : 10,
+		"transactions" : [
+			{ "txid" : "4378c3ffe1459bd5ff04ef19c9d56cfecaad45ae3bb0661768b42f9a40952bfa",
+			  "address" : "CT8YNXrn4EmPXTin4ecMtuWu1gvvUQuEKH",
+			  "category" : "receive",
+			  "amount" : 0.90000000,
+			  "confirmations" : 52920,
+			  "blockhash" : "96b0885392d5b316e3cdb4fe9be0327790f7135f517ca38e50d9b4f8599d85b6",
+			  "blockindex" : 1,
+			  "blocktime" : 1454950142,
+			  "time" : 1454950116,
+			  "timereceived" : 1454950116
+			},
+			{ "txid" : "610157549d6c2f62809ad245134e5cdbc38e2738907daf376e71f523d3b99e8a",
+			  "address" : "CVXzfjz3q1x3K8AeuCmhZ5cHK3ZzDgzURV",
+			  "category" : "send",
+			  "amount" : -1.00000000,
+			  "fee" : -0.00100000,
+			  "confirmations" : 66137,
+			  "blockhash" : "7fd6b63c8f6c7e2b8bc48935efa560a50d16a1733c69c0a1c66e49a8ba44c1be",
+			  "blockindex" : 1,
+			  "blocktime" : 1454405676,
+			  "time" : 1454405608,
+			  "timereceived" : 1454405608
+			}
+		]
+	}
+}
+
+--
+-- Get Address book
+--
+Request:
+{
+	"command" : "getaddresslist",
+	"accountid" : "andre@jochems.com",
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"arguments" : {
+		"walletid" : "517beddb-8de2-4112-8aad-9e4d627916aa"
+	}
+}
+
+Response:
+{
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"result" : {
+		"errorCode" : 0,
+		"errorMessage" : ""
+	}
+}
+
+--
+-- Send Coins
+--
+Request:
+{
+	"command" : "sendtoaddress",
+	"accountid" : "andre@jochems.com",
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"arguments" : {
+	    "walletid" : "517beddb-8de2-4112-8aad-9e4d627916aa",
+		"address" : "AB3423SDSDFS",
+		"amount" : 234.67854,
+		"comment" : "Coins for a test transaction"
+	}
+}
+
+Response:
+{
+	"sessionid" : "123123-12312321-123123123",
+	"correlationid" : "65bb1cf4-3ca2-4d32-9a3c-9ae264424b0e",
+	"result" : {
+		"errorCode" : 0,
+		"errorMessage" : ""
+	}
+}

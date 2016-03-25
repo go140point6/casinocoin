@@ -163,6 +163,24 @@ void CWallet::SetBestChain(const CBlockLocator& loc)
     walletdb.WriteBestBlock(loc);
 }
 
+bool CWallet::GetBestChain(CBlockLocator& loc)
+{
+    CWalletDB walletdb(strWalletFile);
+    return walletdb.ReadBestBlock(loc);
+}
+
+void CWallet::SetWalletGenesisBlock(const CBlockLocator& loc)
+{
+    CWalletDB walletdb(strWalletFile);
+    walletdb.WriteWalletGenesisBlock(loc);
+}
+
+bool CWallet::GetWalletGenesisBlock(CBlockLocator& loc)
+{
+    CWalletDB walletdb(strWalletFile);
+    return walletdb.ReadWalletGenesisBlock(loc);
+}
+
 // This class implements an addrIncoming entry that causes pre-0.4
 // clients to crash on startup if reading a private-key-encrypted wallet.
 class CCorruptAddress

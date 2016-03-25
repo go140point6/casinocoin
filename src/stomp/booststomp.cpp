@@ -34,6 +34,7 @@ http://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License
 #include <boost/thread.hpp>
 
 #include "booststomp.h"
+#include "main.h"
 
 namespace STOMP {
   
@@ -73,7 +74,7 @@ namespace STOMP {
 		cmd_map["RECEIPT"] 	= &BoostStomp::process_RECEIPT;
 		cmd_map["ERROR"] 	= &BoostStomp::process_ERROR;
 		// set default debug flag
-        m_showDebug = true;
+        m_showDebug = false;
   }
 
 
@@ -359,7 +360,8 @@ namespace STOMP {
     			m_connected = false;
     			debug_print(boost::format("Error writing to STOMP server: error code:%1%, message:%2%") % err.code() % err.what());
     			// put! the kot! down! slowly!
-    			m_sendqueue.push(frame);
+                if(err.code().value() != 10009)
+                    m_sendqueue.push(frame);
     			stop();
     		}
     };
@@ -592,7 +594,7 @@ namespace STOMP {
       if (m_showDebug) {
         ptime now = second_clock::universal_time();
         global_stream_lock.lock();
-        std::cout << "[" << FormatTime(now) << ": " << boost::this_thread::get_id() << "] BoostStomp:" << fmt.str() << endl;
+        printf("[%s: %s] BoostStomp: %s\n", FormatTime(now).c_str(), boost::lexical_cast<std::string>(boost::this_thread::get_id()).c_str(), fmt.str().c_str());
         global_stream_lock.unlock();
 	 }
   }

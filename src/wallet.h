@@ -265,6 +265,12 @@ public:
     }
     void SetBestChain(const CBlockLocator& loc);
 
+    bool GetBestChain(CBlockLocator& loc);
+
+    void SetWalletGenesisBlock(const CBlockLocator& loc);
+
+    bool GetWalletGenesisBlock(CBlockLocator& loc);
+
     DBErrors LoadWallet(bool& fFirstRunRet);
 
     bool SetAddressBookName(const CTxDestination& address, const std::string& strName);

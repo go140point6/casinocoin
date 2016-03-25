@@ -9,13 +9,13 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include "walletserver.h"
 #include "wallet.h"
 #include "walletdb.h"
 #include "bitcoinrpc.h"
 #include "init.h"
 #include "base58.h"
 #include "ui_interface.h"
-#include "walletserver.h"
 
 using namespace std;
 using namespace boost;
@@ -1641,19 +1641,21 @@ Value startwalletserversession(const Array &params, bool fHelp)
             "The server is not started in Wallet Server mode so no session can be created");
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "startwalletserversession [identifier]\n"
+            "startwalletserversession [accountid]\n"
             "Starts a Wallet Server session and returns a session id.\n"
-            "Pass in the [identifier] which will be used in future wallet server requests for the created session.");
+            "Pass in the [accountid] which will be used in future wallet server requests for the created session.");
     // get the account id
     std::string accountId = params[0].get_str();
     // check if accountId is not already in a session
-    if(isNewAccountId(accountId))
+    if(walletServer.isNewAccountId(accountId))
     {
         // Create a session id
         boost::uuids::uuid uuid = boost::uuids::random_generator()();
         std::string sessionId = boost::lexical_cast<std::string>(uuid);
+        // create session object
+        Session wsSession = {accountId, sessionId, (int)time(NULL), false, 0};
         // Notify the Wallet Server of the newsession
-        uiInterface.NotifyStartNewWalletServerSession(accountId, sessionId);
+        walletServer.NotifyStartNewWalletServerSession(accountId, wsSession);
         Object ret;
         ret.push_back(Pair("accountid", accountId));
         ret.push_back(Pair("sessionid", sessionId));
@@ -1662,4 +1664,178 @@ Value startwalletserversession(const Array &params, bool fHelp)
     else
         throw JSONRPCError(RPC_WALLETSERVER_INVALID_ID, "Given identifier is already in an active session");
 
+}
+
+Value listwalletserversessions(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so no sessions list available");
+    if (fHelp || params.size() > 0)
+        throw runtime_error(
+            "listwalletserversessions\n"
+            "Returns a list with current active walletserver sessions.");
+    // get the sessions
+    sessionKeyValueType &wsSessions = walletServer.getSessions();
+    // create the output object
+    Array ret;
+    BOOST_FOREACH( sessionKeyValueType::value_type &session, wsSessions )
+    {
+        Object o;
+        o.push_back(Pair("accountid", session.second.email));
+        o.push_back(Pair("sessionid", session.second.sessionId));
+        o.push_back(Pair("creationtime", session.second.creationTime));
+        o.push_back(Pair("walletopen", session.second.walletOpen));
+        o.push_back(Pair("lastcommandtime", session.second.lastCommandTime));
+        ret.push_back(o);
+    }
+    return ret;
+}
+
+Value stopwalletserversession(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so no sessions list available");
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "stopwalletserversession [sessionid]\n"
+            "Removes a Wallet Server session and closes the wallet if open.\n"
+            "Pass in the [sessionid] of the session that has to be removed.");
+    // get the session id
+    std::string sessionId = params[0].get_str();
+    // remove session and return the result
+    Object ret;
+    ret.push_back(Pair("result", walletServer.deleteSession(sessionId)));
+    return ret;
+}
+
+Value listwallets(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so no wallet list available");
+    if (fHelp || params.size() > 0)
+        throw runtime_error(
+            "listwallets\n"
+            "Returns a list with wallets stored by the walletserver.");
+    // get the wallets
+    keyValueType wsWallets = walletServer.getWallets();
+    // create the output object
+    Array ret;
+    BOOST_FOREACH( keyValueType::value_type &wallet, wsWallets )
+    {
+        Object o;
+        o.push_back(Pair("walletid", wallet.first));
+        o.push_back(Pair("accountid", wallet.second));
+        ret.push_back(o);
+    }
+    return ret;
+}
+
+Value wsopenwallet(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so command is not available");
+    if (fHelp || params.size() != 3)
+        throw runtime_error(
+            "wsopenwallet [sessionid] [accountid] [walletid]\n"
+            "Open a wallet for a session. account and wallet id combination.");
+    // get the wallets
+    keyValueType wsWallets = walletServer.getWallets();
+    // create the output object
+    Array ret;
+    BOOST_FOREACH( keyValueType::value_type &wallet, wsWallets )
+    {
+        Object o;
+        o.push_back(Pair("walletid", wallet.first));
+        o.push_back(Pair("accountid", wallet.second));
+        ret.push_back(o);
+    }
+    return ret;
+}
+
+Value wsclosewallet(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so command is not available");
+    if (fHelp || params.size() != 3)
+        throw runtime_error(
+            "wsclosewallet [sessionid] [accountid] [walletid]\n"
+            "Open a wallet for a session. account and wallet id combination.");
+    // get the wallets
+    keyValueType wsWallets = walletServer.getWallets();
+    // create the output object
+    Array ret;
+    BOOST_FOREACH( keyValueType::value_type &wallet, wsWallets )
+    {
+        Object o;
+        o.push_back(Pair("walletid", wallet.first));
+        o.push_back(Pair("accountid", wallet.second));
+        ret.push_back(o);
+    }
+    return ret;
+}
+
+Value wsgetinfo(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so command is not available");
+    if (fHelp || params.size() != 3)
+        throw runtime_error(
+            "wsgetinfo [sessionid] [accountid] [walletid]\n"
+            "Get the Wallet Information for a given session. account and wallet id combination.");
+    Object obj;
+    obj.push_back(Pair("version",       (int)CLIENT_VERSION));
+    obj.push_back(Pair("protocolversion",(int)PROTOCOL_VERSION));
+    return obj;
+}
+
+Value wsgetaddresslist(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so command is not available");
+    if (fHelp || params.size() != 3)
+        throw runtime_error(
+            "wsgetaddresslist [sessionid] [accountid] [walletid]\n"
+            "Open a wallet for a session. account and wallet id combination.");
+    // get the wallets
+    keyValueType wsWallets = walletServer.getWallets();
+    // create the output object
+    Array ret;
+    BOOST_FOREACH( keyValueType::value_type &wallet, wsWallets )
+    {
+        Object o;
+        o.push_back(Pair("walletid", wallet.first));
+        o.push_back(Pair("accountid", wallet.second));
+        ret.push_back(o);
+    }
+    return ret;
+}
+
+Value wssendtoaddress(const Array &params, bool fHelp)
+{
+    if(!fWalletServer)
+        throw runtime_error(
+            "The server is not started in Wallet Server mode so command is not available");
+    if (fHelp || params.size() != 5)
+        throw runtime_error(
+            "wssendtoaddress [sessionid] [accountid] [walletid] [address] [amount]\n"
+            "Open a wallet for a session. account and wallet id combination.");
+    // get the wallets
+    keyValueType wsWallets = walletServer.getWallets();
+    // create the output object
+    Array ret;
+    BOOST_FOREACH( keyValueType::value_type &wallet, wsWallets )
+    {
+        Object o;
+        o.push_back(Pair("walletid", wallet.first));
+        o.push_back(Pair("accountid", wallet.second));
+        ret.push_back(o);
+    }
+    return ret;
 }

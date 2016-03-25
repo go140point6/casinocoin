@@ -1,0 +1,8 @@
+100 - No arguments supplied for WalletServer command.
+101 - No Wallet ID supplied in arguments array.
+102 - Invalid Account ID for given Wallet ID.
+103 - Wallet file does not exist on WalletServer.
+104 - No passphrase supplied for wallet encryption.
+105 - Given SessionId is different than the one registered for AccountId.
+106 - No session exists for given AccountId.
+107 - Wallet Server could not parse the incomming message.

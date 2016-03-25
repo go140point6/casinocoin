@@ -227,11 +227,9 @@ static void DebugPrintInit()
 {
     assert(fileout == NULL);
     assert(mutexDebugLog == NULL);
-
     boost::filesystem::path pathDebug = GetDataDir() / "debug.log";
     fileout = fopen(pathDebug.string().c_str(), "a");
     if (fileout) setbuf(fileout, NULL); // unbuffered
-
     mutexDebugLog = new boost::mutex();
 }
 
@@ -1087,7 +1085,6 @@ const boost::filesystem::path &GetDataDir(bool fNetSpecific)
         path /= "testnet3";
 
     fs::create_directories(path);
-
     fCachedPath[fNetSpecific] = true;
     return path;
 }

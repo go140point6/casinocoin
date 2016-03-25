@@ -210,6 +210,15 @@ extern json_spirit::Value gettxout(const json_spirit::Array& params, bool fHelp)
 extern json_spirit::Value verifychain(const json_spirit::Array& params, bool fHelp);
 
 extern json_spirit::Value getcoinsupply(const json_spirit::Array& params, bool fHelp);
+//WalletServer RPC Commands
 extern json_spirit::Value startwalletserversession(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value listwalletserversessions(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value stopwalletserversession(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value listwallets(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value wsopenwallet(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value wsclosewallet(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value wsgetinfo(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value wsgetaddresslist(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value wssendtoaddress(const json_spirit::Array& params, bool fHelp);
 
 #endif

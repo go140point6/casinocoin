@@ -8,7 +8,7 @@
 #include "bitcoinrpc.h"
 #include "net.h"
 #include "init.h"
-#include "util.h"
+
 #include "ui_interface.h"
 #include "walletserver.h"
 
@@ -27,6 +27,7 @@ using namespace std;
 using namespace boost;
 
 CWallet* pwalletMain;
+WalletServer walletServer;
 CClientUIInterface uiInterface;
 boost::thread walletServerThread;
 
@@ -263,7 +264,6 @@ extern void noui_connect();
 int main(int argc, char* argv[])
 {
     bool fRet = false;
-
     // Connect bitcoind signal handlers
     noui_connect();
 
@@ -1141,6 +1141,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     fWalletServer = GetBoolArg("-walletserver", false);
     if (fWalletServer)
     {
+        // Run a thread for the WalletServer
         threadGroup.create_thread(boost::bind(&StartWalletServerThread));
     }
 

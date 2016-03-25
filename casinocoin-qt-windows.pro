@@ -243,7 +243,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/walletserver.h \
     src/stomp/helpers.h \
     src/stomp/booststomp.h \
-    src/stomp/stompframe.h
+    src/stomp/stompframe.h \
+    src/walletserversession.h
 
 SOURCES += src/qt/bitcoin.cpp \
     src/qt/bitcoingui.cpp \
@@ -348,7 +349,10 @@ SOURCES += src/qt/bitcoin.cpp \
     src/walletserver.cpp \
     src/stomp/helpers.cpp \
     src/stomp/booststomp.cpp \
-    src/stomp/stompframe.cpp
+    src/stomp/stompframe.cpp \
+    src/walletsession.cpp \
+    src/json/json_spirit_value.cpp \
+    src/walletserversession.cpp
 
 RESOURCES += src/qt/bitcoin.qrc
 

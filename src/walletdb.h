@@ -158,6 +158,17 @@ public:
     DBErrors LoadWallet(CWallet* pwallet);
     static bool Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys);
     static bool Recover(CDBEnv& dbenv, std::string filename);
+
+    bool WriteWalletGenesisBlock(const CBlockLocator& locator)
+    {
+        nWalletDBUpdated++;
+        return Write(std::string("walletgenesisblock"), locator);
+    }
+
+    bool ReadWalletGenesisBlock(CBlockLocator& locator)
+    {
+        return Read(std::string("walletgenesisblock"), locator);
+    }
 };
 
 #endif // BITCOIN_WALLETDB_H

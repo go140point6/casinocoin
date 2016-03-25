@@ -267,6 +267,14 @@ static const CRPCCommand vRPCCommands[] =
     { "verifychain",            &verifychain,            true,      false,      false },
     { "getcoinsupply",          &getcoinsupply,          true,      false,      false },
     { "startwalletserversession", &startwalletserversession, true,  false,      false },
+    { "listwalletserversessions", &listwalletserversessions, true,  false,      false },
+    { "stopwalletserversession", &stopwalletserversession,   true,  false,      false },
+    { "listwallets",            &listwallets,            true,      false,      false },
+    { "wsopenwallet",           &wsopenwallet,           true,      false,      false },
+    { "wsclosewallet",          &wsclosewallet,          true,      false,      false },
+    { "wsgetinfo",              &wsgetinfo,              true,      false,      false },
+    { "wsgetaddresslist",       &wsgetaddresslist,       true,      false,      false },
+    { "wssendtoaddress",        &wssendtoaddress,        true,      false,      false },
 };
 
 CRPCTable::CRPCTable()

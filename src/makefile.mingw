@@ -25,6 +25,8 @@ BOOST_SUFFIX?=-mgw49-mt-s-1_55
 
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
+ -I"$(CURDIR)\stomp" \
+ -I"$(CURDIR)\json" \
  -I"C:\deps\boost_1_55_0" \
  -I"C:\deps\db-4.8.30.NC\build_unix" \
  -I"C:\deps\openssl-1.0.2d\include" \
@@ -73,8 +75,7 @@ endif
 LIBS += -l mingwthrd -l kernel32 -l user32 -l gdi32 -l comdlg32 -l winspool -l winmm -l shell32 -l comctl32 -l ole32 -l oleaut32 -l uuid -l rpcrt4 -l advapi32 -l ws2_32 -l mswsock -l shlwapi -l pthread
 
 # TODO: make the mingw builds smarter about dependencies, like the linux/osx builds are
-HEADERS = $(wildcard *.h) \
-          stomp/$(wildcar *.h)
+HEADERS = $(wildcard *.h)
 
 OBJS= \
     leveldb/libleveldb.a \
@@ -109,10 +110,14 @@ OBJS= \
     obj/noui.o \
     obj/leveldb.o \
     obj/txdb.o \
-	obj/stomp/helpers.o \
-	obj/stomp/booststomp.o \
-	obj/stomp/stompframe.o \
-	obj/walletserver.o
+	obj/json/json_spirit_value.o \
+	obj/json/json_spirit_reader.o \
+	obj/json/json_spirit_writer.o \
+    obj/stomp/helpers.o \
+    obj/stomp/booststomp.o \
+    obj/stomp/stompframe.o \
+    obj/walletserver.o \
+	obj/walletserversession.o
 
 ifdef USE_SSE2
 DEFS += -DUSE_SSE2
@@ -138,7 +143,6 @@ obj/%-sse2.o: %-sse2.cpp
 	$(CXX) -c $(CFLAGS) -msse2 -mstackrealign -o $@ $<
 
 obj/%.o: %.cpp $(HEADERS)
-	mkdir -p obj/stomp
 	$(CXX) -c $(CFLAGS) -o $@ $<
 
 casinocoind.exe: $(OBJS:obj/%=obj/%)
@@ -154,7 +158,8 @@ test_casinocoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 
 clean:
 	rm -f casinocoind.exe test_casinocoin.exe
-	rm -f obj/*
+	rm -f obj/stomp/*
+	rm -f obj/*.o
 	rm -f obj-test/*
 	cd leveldb && $(MAKE) TARGET_OS=NATIVE_WINDOWS clean && cd ..
 
