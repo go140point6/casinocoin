@@ -71,9 +71,9 @@ void StartWalletServerThread()
     // start the client, (by connecting to the STOMP server)
     walletServer.stomp_client->start();
     // subscribe to server in queues
-    walletServer.stomp_client->subscribe(WalletServer::server_in_queue, (STOMP::pfnOnStompMessage_t) &walletServer.in_queue_callback);
+    walletServer.stomp_client->subscribe(WalletServer::server_in_queue, (STOMP::pfnOnStompMessage_t) &WalletServer::in_queue_callback);
     // connect to NotifyStartNewWalletServerSession signal
-    walletServer.NotifyStartNewWalletServerSession.connect(boost::bind(&walletServer.NotifySessionCreated, &walletServer, _1, _2));
+    walletServer.NotifyStartNewWalletServerSession.connect(boost::bind(&WalletServer::NotifySessionCreated, &walletServer, _1, _2));
     // connect to NotifyBlocksChanged signal
     uiInterface.NotifyBlocksChanged.connect(boost::bind(&WalletServer::NotifyBlocksChanged, &walletServer));
 }
@@ -98,7 +98,7 @@ void StopWalletServerThread()
         // remove sessions
         sessions.clear();
         // Interupt all WalletServerSession threads
-        printf("StopWalletServerThread - Session Threads: %i\n", walletServerSessionsTG.size());
+        printf("StopWalletServerThread - Session Threads: %lu\n", walletServerSessionsTG.size());
         printf("StopWalletServerThread - Interrupt All\n");
         walletServerSessionsTG.interrupt_all();
         // Join all WalletServerSessions  to wait for their completion

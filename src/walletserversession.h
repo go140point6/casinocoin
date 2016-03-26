@@ -59,7 +59,7 @@ class WalletServerSession
             // start the client, (by connecting to the STOMP server)
             session_stomp_client->start();
             // connect to Signals
-            uiInterface.NotifyBlocksChanged.connect(boost::bind(&NotifyBlocksChanged, this));
+            uiInterface.NotifyBlocksChanged.connect(boost::bind(&WalletServerSession::NotifyBlocksChanged, this));
             printf("WalletServerSession - Start Dequeue for session: %s\n", sessionId.c_str());
             while (true)
             {
