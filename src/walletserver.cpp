@@ -75,7 +75,7 @@ void StartWalletServerThread()
     // connect to NotifyStartNewWalletServerSession signal
     walletServer.NotifyStartNewWalletServerSession.connect(boost::bind(&walletServer.NotifySessionCreated, &walletServer, _1, _2));
     // connect to NotifyBlocksChanged signal
-    uiInterface.NotifyBlocksChanged.connect(boost::bind(&walletServer.NotifyBlocksChanged, &walletServer));
+    uiInterface.NotifyBlocksChanged.connect(boost::bind(&WalletServer::NotifyBlocksChanged, &walletServer));
 }
 
 void StopWalletServerThread()
@@ -90,7 +90,8 @@ void StopWalletServerThread()
             {
                 QueueProducer qp = queueIter->second;
                 printf("WalletServer - Enqueue Close Session command for queue session: %s\n", qp.getSessionId().c_str());
-                Command cmd = {it->second.email, it->second.sessionId, "correlationId", "closesession"};
+                std::map<std::string, std::string> argumentsMap;
+                Command cmd = {it->second.email, it->second.sessionId, "correlationId", "closesession",argumentsMap};
                 qp.Enqueue(cmd);
             }
         }
@@ -330,7 +331,7 @@ void WalletServer::loadWalletServerSecrets()
         boost::archive::binary_iarchive bia(ifs);
         bia >> walletServerSecrets;
     }
-    printf("CasinoCoin WalletServer: %i walletsecrets loaded\n", walletServerSecrets.size());
+    printf("CasinoCoin WalletServer: %lu walletsecrets loaded\n", walletServerSecrets.size());
 }
 
 // save wallet server secret map to filesystem
@@ -340,7 +341,7 @@ void WalletServer::saveWalletServerSecrets()
     std::ofstream ofs(walletServerMapPath.string().c_str());
     boost::archive::binary_oarchive boa(ofs);
     boa << walletServerSecrets;
-    printf("CasinoCoin WalletServer: %i walletsecrets saved\n", walletServerSecrets.size());
+    printf("CasinoCoin WalletServer: %lu walletsecrets saved\n", walletServerSecrets.size());
 }
 
 // load wallet list map from filesystem
@@ -354,7 +355,7 @@ void WalletServer::loadWalletList()
         boost::archive::binary_iarchive bia(ifs);
         bia >> wallets;
     }
-    printf("CasinoCoin WalletServer: %i wallets loaded\n", wallets.size());
+    printf("CasinoCoin WalletServer: %lu wallets loaded\n", wallets.size());
 }
 
 // save wallet list map to filesystem
@@ -364,7 +365,7 @@ void WalletServer::saveWalletList()
     std::ofstream ofs(walletListMapPath.string().c_str());
     boost::archive::binary_oarchive boa(ofs);
     boa << wallets;
-    printf("CasinoCoin WalletServer: %i wallets saved\n", wallets.size());
+    printf("CasinoCoin WalletServer: %lu wallets saved\n", wallets.size());
 }
 
 bool WalletServer::isNewAccountId(std::string accountId)
@@ -410,7 +411,8 @@ bool WalletServer::deleteSession(std::string sessionId)
             {
                 QueueProducer qp = queueIter->second;
                 printf("WalletServer - Enqueue Close Wallet command for queue session: %s\n", qp.getSessionId().c_str());
-                Command cmd = {session.second.email, session.second.sessionId, "correlationId", "closewallet"};
+                std::map<std::string, std::string> argumentsMap;
+                Command cmd = {session.second.email, session.second.sessionId, "correlationId", "closewallet",argumentsMap};
                 qp.Enqueue(cmd);
             }
             // remove sessions object
