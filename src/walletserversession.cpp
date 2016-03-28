@@ -51,7 +51,7 @@ void WalletServerSession::NotifyTransactionChanged(CWallet *wallet, const uint25
         list<pair<CTxDestination, int64> > listReceived;
         list<pair<CTxDestination, int64> > listSent;
         tx.GetAmounts(listReceived, listSent, nFee, strSentAccount);
-        printf("WalletServerSession - NotifyTransactionChanged: received: %i sent: %i", listReceived.size(), listSent.size());
+        printf("WalletServerSession - NotifyTransactionChanged: received: %lu sent: %lu\n", listReceived.size(), listSent.size());
         if(nFee < CTransaction::nMinTxFee)
             nFee = CTransaction::nMinTxFee;
         // define output object
@@ -64,9 +64,9 @@ void WalletServerSession::NotifyTransactionChanged(CWallet *wallet, const uint25
         result.push_back(json_spirit::Pair("errorCode", 0));
         result.push_back(json_spirit::Pair("errorMessage", ""));
         result.push_back(json_spirit::Pair("transactionid", hash.ToString()));
-        result.push_back(json_spirit::Pair("transactiontime", tx.GetTxTime()));
+        result.push_back(json_spirit::Pair("transactiontime",  boost::int64_t(tx.GetTxTime())));
         // Send
-        if (!listSent.empty() || nFee != 0)
+        if (listSent.size() > 0 || nFee != 0)
         {
             BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& s, listSent)
             {
@@ -77,7 +77,7 @@ void WalletServerSession::NotifyTransactionChanged(CWallet *wallet, const uint25
             }
         }
         // Received
-        else if (listReceived.size() > 0 && tx.GetDepthInMainChain() >= 1)
+        else if (listReceived.size() > 0)
         {
             BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& r, listReceived)
             {
@@ -101,7 +101,7 @@ void WalletServerSession::sendMessageToQueue(json_spirit::Object outputJson)
         // add an outgoing message to the topic
         std::string body = json_spirit::write(outputJson);
         printf("WalletServerSession %s JSON: %s\n", sessionId.c_str(), body.c_str());
-        bool sendResult = session_stomp_client->send(WalletServer::server_out_queue, headers, body);
+        session_stomp_client->send(WalletServer::server_out_queue, headers, body);
     }
     catch (std::exception& e)
     {
