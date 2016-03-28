@@ -264,7 +264,7 @@ void WalletServerSession::openWallet(Command data)
                 {
                     // connect to new Transaction Notifications
                     printf("WalletServerSession -  Connect to new Transaction Notification\n");
-                    clientWallet->NotifyTransactionChanged.connect(boost::bind(NotifyTransactionChanged, this, _1, _2, _3));
+                    clientWallet->NotifyTransactionChanged.connect(boost::bind(&WalletServerSession::NotifyTransactionChanged, this, _1, _2, _3));
                     // set wallet open in session
                     walletOpen = true;
                     walletServer.setWalletOpen(sessionId, true);
@@ -334,13 +334,13 @@ void WalletServerSession::openWallet(Command data)
 
 void WalletServerSession::closeWallet(Command data)
 {
-    printf("WalletServerSession sessionId: %s Execute closeWallet\n", sessionId.c_str(), data.command.c_str());
+    printf("WalletServerSession sessionId: %s Execute closeWallet\n", sessionId.c_str());
     closeWalletIfOpen();
 }
 
 json_spirit::Value WalletServerSession::getWalletInfo(Command data)
 {
-    printf("WalletServerSession sessionId: %s Execute getWalletInfo\n", this->sessionId.c_str(), data.command.c_str());
+    printf("WalletServerSession sessionId: %s Execute getWalletInfo\n", this->sessionId.c_str());
     // define output object
     json_spirit::Object outputJson;
     outputJson.push_back(json_spirit::Pair("sessionid", sessionId));
@@ -387,7 +387,7 @@ json_spirit::Value WalletServerSession::getWalletInfo(Command data)
 
 json_spirit::Value WalletServerSession::getAddressBook(Command data)
 {
-    printf("WalletServerSession sessionId: %s Execute getAddressBook\n", sessionId.c_str(), data.command.c_str());
+    printf("WalletServerSession sessionId: %s Execute getAddressBook\n", sessionId.c_str());
     balancesMapType balances = clientWallet->GetAddressBalances();
     // define output object
     json_spirit::Object outputJson;
