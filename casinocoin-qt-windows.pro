@@ -1,45 +1,29 @@
 TEMPLATE = app
 TARGET = casinocoin-qt
-VERSION = 2.0.0.0
+VERSION = 2.1.0.0
 INCLUDEPATH += src src/json src/qt
 QT += core gui network widgets qml quick
-DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE USE_IPV6 __NO_SYSTEM_INCLUDES
+DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE USE_IPV6
 CONFIG += no_include_pwd
 CONFIG += thread
-CONFIG += static
 
-BOOST_LIB_SUFFIX=-mgw49-mt-s-1_55
-BOOST_THREAD_LIB_SUFFIX=$$BOOST_LIB_SUFFIX
-BOOST_INCLUDE_PATH=C:/deps/boost_1_55_0
-BOOST_LIB_PATH=C:/deps/boost_1_55_0/stage/lib
-BDB_INCLUDE_PATH=C:/deps/db-4.8.30.NC/build_unix
-BDB_LIB_PATH=C:/deps/db-4.8.30.NC/build_unix
+# Build boost:
+# .\b2 toolset=gcc address-model=32 define=BOOST_USE_WINAPI_VERSION=0x0600 variant=release link=static threading=multi runtime-link=static --build-type=complete --with-chrono --with-filesystem --with-program_options --with-system --with-thread stage
+# define=BOOST_USE_WINAPI_VERSION=0x0600
+BOOST_LIB_SUFFIX=-mt
+BOOST_LIB_PATH=C:/msys64/usr/src/deps32/boost_1_60_0/stage/lib
+BOOST_INCLUDE_PATH=C:/msys64/usr/src/deps32/boost_1_60_0
+BDB_INCLUDE_PATH=C:/msys64/usr/src/deps32/db-4.8.30.NC/build_unix
+BDB_LIB_PATH=C:/msys64/usr/src/deps32/db-4.8.30.NC/build_unix
 BDB_LIB_SUFFIX=-4.8
-OPENSSL_INCLUDE_PATH=C:/deps/openssl-1.0.2d/include
-OPENSSL_LIB_PATH=C:/deps/openssl-1.0.2d
-MINIUPNPC_INCLUDE_PATH=C:/deps/
-MINIUPNPC_LIB_PATH=C:/deps/miniupnpc
-QRENCODE_INCLUDE_PATH=C:/deps/qrencode-3.4.3
-QRENCODE_LIB_PATH=C:/deps/qrencode-3.4.3/.libs
+MINIUPNPC_INCLUDE_PATH=C:/msys64/usr/src/deps32/miniupnpc-1.9/include
+MINIUPNPC_LIB_PATH=C:/msys64/usr/src/deps32/miniupnpc-1.9
+QRENCODE_INCLUDE_PATH=C:/msys64/usr/src/deps32/qrencode-3.4.4
+QRENCODE_LIB_PATH=C:/msys64/usr/src/deps32/qrencode-3.4.4/.libs
 
 OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
-
-# for extra security against potential buffer overflows: enable GCCs Stack Smashing Protection
-QMAKE_CXXFLAGS *= -fstack-protector-all
-QMAKE_LFLAGS *= -fstack-protector-all
-# Exclude on Windows cross compile with MinGW 4.2.x, as it will result in a non-working executable!
-# This can be enabled for Windows, when we switch to MinGW >= 4.4.x.
-
-# for extra security (see: https://wiki.debian.org/Hardening): this flag is GCC compiler-specific
-QMAKE_CXXFLAGS *= -D_FORTIFY_SOURCE=2
-# for extra security on Windows: enable ASLR and DEP via GCC linker flags
-QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--nxcompat
-# on Windows: enable GCC large address aware linker flag
-QMAKE_LFLAGS *= -Wl,--large-address-aware
-# i686-w64-mingw32
-QMAKE_LFLAGS *= -static-libgcc -static-libstdc++
 
 # use: qmake "USE_QRCODE=1"
 # libqrencode (http://fukuchi.org/works/qrencode/index.en.html) must be installed for support
@@ -116,9 +100,7 @@ contains(USE_BUILD_INFO, 1) {
     DEFINES += HAVE_BUILD_INFO
 }
 
-QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter -Wno-strict-aliasing -Wstack-protector
-
-QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-local-typedefs -Wno-maybe-uninitialized
+QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wall -Wextra -Wformat -Wformat-security -Wno-unused -Wno-strict-aliasing -Wstack-protector -Wno-maybe-uninitialized
 
 ##### Start Project Files #####
 
@@ -424,15 +406,6 @@ TSQM.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
 TSQM.CONFIG = no_link
 QMAKE_EXTRA_COMPILERS += TSQM
 
-# platform specific defaults, if not overridden on command line
-isEmpty(BOOST_LIB_SUFFIX) {
-    BOOST_LIB_SUFFIX = -mgw46-mt-s-1_53
-}
-
-isEmpty(BOOST_THREAD_LIB_SUFFIX) {
-    BOOST_THREAD_LIB_SUFFIX = $$BOOST_LIB_SUFFIX
-}
-
 DEFINES += WIN32
 RC_FILE = src/qt/res/bitcoin-qt.rc
 
@@ -448,12 +421,12 @@ RC_FILE = src/qt/res/bitcoin-qt.rc
 }
 
 # Set libraries and includes at end, to use platform-defined defaults if not overridden
-INCLUDEPATH += $$BOOST_INCLUDE_PATH $$BDB_INCLUDE_PATH $$OPENSSL_INCLUDE_PATH $$QRENCODE_INCLUDE_PATH
-LIBS += $$join(BOOST_LIB_PATH,,-L,) $$join(BDB_LIB_PATH,,-L,) $$join(OPENSSL_LIB_PATH,,-L,) $$join(QRENCODE_LIB_PATH,,-L,)
+INCLUDEPATH += $$BDB_INCLUDE_PATH $$QRENCODE_INCLUDE_PATH $$BOOST_INCLUDE_PATH
+LIBS += $$join(BDB_LIB_PATH,,-L,) $$join(QRENCODE_LIB_PATH,,-L,) $$join(BOOST_LIB_PATH,,-L,)
 LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX -lpthread
 # -lgdi32 has to happen after -lcrypto (see  #681)
 LIBS += -lws2_32 -lole32 -lmswsock -loleaut32 -luuid -lgdi32 -lshlwapi
-LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
+LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_LIB_SUFFIX
 LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
 
 system($$QMAKE_LRELEASE -silent $$TRANSLATIONS)

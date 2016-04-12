@@ -6,13 +6,12 @@
 #define _BITCOIN_COMPAT_H 1
 
 #ifdef WIN32
-#define _WIN32_WINNT 0x0501
+#define _WIN32_WINNT 0x0600
 #define WIN32_LEAN_AND_MEAN 1
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
 #define FD_SETSIZE 1024 // max number of fds in fd_set
-#include <windows.h>
 #include <mswsock.h>
 #include <ws2tcpip.h>
 #else
@@ -26,7 +25,8 @@
 #include <ifaddrs.h>
 #endif
 
-typedef u_int SOCKET;
+// SOCKET is defined by TDM-GCC
+// typedef u_int SOCKET;
 #ifdef WIN32
 #define MSG_NOSIGNAL        0
 #define MSG_DONTWAIT        0
