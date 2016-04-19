@@ -5,6 +5,8 @@
 #ifndef BITCOIN_WALLETDB_H
 #define BITCOIN_WALLETDB_H
 
+#define BOOST_NO_CXX11_SCOPED_ENUMS
+
 #include "db.h"
 #include "base58.h"
 

@@ -995,7 +995,7 @@ static std::string FormatException(std::exception* pex, const char* pszThread)
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = COIN_NAME;
+    const char* pszModule = COIN_NAME.c_str();
 #endif
     if (pex)
         return strprintf(
@@ -1052,7 +1052,8 @@ boost::filesystem::path GetDefaultDataDir()
     return pathRet / COIN_NAME_DISPLAY;
 #else
     // Unix
-    return pathRet / "."+ COIN_NAME + "";
+    std::string path = "." + COIN_NAME;
+    return pathRet / path;
 #endif
 #endif
 }
@@ -1093,7 +1094,7 @@ const boost::filesystem::path &GetDataDir(bool fNetSpecific)
 
 boost::filesystem::path GetConfigFile()
 {
-    boost::filesystem::path pathConfigFile(GetArg("-conf", ""+ COIN_NAME + ".conf"));
+    boost::filesystem::path pathConfigFile(GetArg("-conf", std::string("")+ COIN_NAME + ".conf"));
     if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir(false) / pathConfigFile;
     return pathConfigFile;
 }
@@ -1127,7 +1128,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 
 boost::filesystem::path GetPidFile()
 {
-    boost::filesystem::path pathPidFile(GetArg("-pid", ""+ COIN_NAME + "d.pid"));
+    boost::filesystem::path pathPidFile(GetArg("-pid", std::string("")+ COIN_NAME + "d.pid"));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }

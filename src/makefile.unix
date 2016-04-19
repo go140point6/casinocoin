@@ -17,13 +17,13 @@ USE_QRCODE=1
 
 # define libraries
 BOOST_LIB_PATH=$HOME/deps/boost_1_60_0/stage/lib
-BDB_LIB_PATH=$HOME/deps/db-4.8.30.NC/build_unix
+BDB_LIB_PATH=$HOME/deps/db-5.1.29.NC/build_unix
 OPENSSL_LIB_PATH=$HOME/deps/openssl-1.0.2g
 MINIUPNPC_LIB_PATH=$HOME/deps/miniupnpc-1.9
 
 # define includes
 BOOST_INCLUDE_PATH=$HOME/deps/boost_1_60_0
-BDB_INCLUDE_PATH=$HOME/deps/db-4.8.30.NC/build_unix
+BDB_INCLUDE_PATH=$HOME/deps/db-5.1.29.NC/build_unix
 OPENSSL_INCLUDE_PATH=$HOME/deps/openssl-1.0.2g
 MINIUPNPC_INCLUDE_PATH=$HOME/deps/miniupnpc-1.9
 
@@ -119,7 +119,7 @@ DEBUGFLAGS=-g
 
 # CXXFLAGS can be specified on the make command line, so we use xCXXFLAGS that only
 # adds some defaults in front. Unfortunately, CXXFLAGS=... $(CXXFLAGS) does not work.
-xCXXFLAGS=-O2 -pthread -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter \
+xCXXFLAGS=-O2 -std=c++14 -pthread -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter \
     $(DEBUGFLAGS) $(DEFS) $(HARDENING) $(CXXFLAGS)
 
 # LDFLAGS can be specified on the make command line, so we use xLDFLAGS that only
