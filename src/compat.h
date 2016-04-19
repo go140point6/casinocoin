@@ -25,13 +25,12 @@
 #include <ifaddrs.h>
 #endif
 
-// SOCKET is defined by TDM-GCC
-// typedef u_int SOCKET;
 #ifdef WIN32
 #define MSG_NOSIGNAL        0
 #define MSG_DONTWAIT        0
 typedef int socklen_t;
 #else
+typedef u_int SOCKET;
 #include "errno.h"
 #define WSAGetLastError()   errno
 #define WSAEINVAL           EINVAL

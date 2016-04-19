@@ -16,16 +16,16 @@ USE_IPV6:=1
 USE_QRCODE=1
 
 # define libraries
-BOOST_LIB_PATH=/home/ubuntu/deps/linux/boost_1_55_0/stage/lib
-BDB_LIB_PATH=/home/ubuntu/deps/linux/db-4.8.30.NC/build_unix
-OPENSSL_LIB_PATH=/home/ubuntu/deps/linux/openssl-1.0.1h
-MINIUPNPC_LIB_PATH=/home/ubuntu/deps/linux/miniupnpc
+BOOST_LIB_PATH=$HOME/deps/boost_1_60_0/stage/lib
+BDB_LIB_PATH=$HOME/deps/db-4.8.30.NC/build_unix
+OPENSSL_LIB_PATH=$HOME/deps/openssl-1.0.2g
+MINIUPNPC_LIB_PATH=$HOME/deps/miniupnpc-1.9
 
 # define includes
-BOOST_INCLUDE_PATH=/home/ubuntu/deps/linux/boost_1_55_0
-BDB_INCLUDE_PATH=/home/ubuntu/deps/linux/db-4.8.30.NC/build_unix
-OPENSSL_INCLUDE_PATH=/home/ubuntu/deps/linux/openssl-1.0.1h
-MINIUPNPC_INCLUDE_PATH=/home/ubuntu/deps/linux
+BOOST_INCLUDE_PATH=$HOME/deps/boost_1_60_0
+BDB_INCLUDE_PATH=$HOME/deps/db-4.8.30.NC/build_unix
+OPENSSL_INCLUDE_PATH=$HOME/deps/openssl-1.0.2g
+MINIUPNPC_INCLUDE_PATH=$HOME/deps/miniupnpc-1.9
 
 LINK:=$(CXX)
 
