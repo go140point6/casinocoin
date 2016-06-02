@@ -92,7 +92,7 @@ WalletView::WalletView(QWidget *parent, BitcoinGUI *_gui):
     // Clicking on "Export" allows to export the transaction list
     connect(exportButton, SIGNAL(clicked()), transactionView, SLOT(exportClicked()));
     // subscribe to coin value changes
-    connect(overviewPage, SIGNAL(coinFiatValueChanged(const QString)), infoPage, SLOT(setCoinFiatValue(const QString)));
+    connect(overviewPage, SIGNAL(coinValueChanged(const QString, const QString)), infoPage, SLOT(setCoinValues(const QString, const QString)));
     gotoOverviewPage();
 }
 

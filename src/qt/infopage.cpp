@@ -25,12 +25,6 @@ InfoPage::InfoPage(QWidget *parent) :
 void InfoPage::setWalletModel(WalletModel *model)
 {
     this->walletModel = model;
-    if(model)
-    {
-        // subscribe to transaction changes
-        connect(model, SIGNAL(numTransactionsChanged(int)), this, SLOT(setNumTransactions(int)));
-        setNumTransactions(model->getNumTransactions());
-    }
 }
 
 void InfoPage::setClientModel(ClientModel *model)
@@ -63,11 +57,6 @@ void InfoPage::setNumBlocks(int count, int countOfPeers)
         double megaHash = GetNetworkHashRate(-1, count) / 1000000;
         ui->txtHashRate->setText(QString::number(megaHash,'f',0).append(" MHash/sec"));
     }
-}
-
-void InfoPage::setNumTransactions(int count)
-{
-    ui->txtTransactionCount->setText(QString::number(count));
 }
 
 double InfoPage::GetNetworkHashRate(int lookup, int height) {
@@ -119,7 +108,8 @@ void InfoPage::createExchangesWidget()
 	ui->verticalLayoutExchanges->addWidget( exchangesWidget->dockQmlToWidget() );
 }
 
-void InfoPage::setCoinFiatValue(QString coinValue)
+void InfoPage::setCoinValues(QString coinValue, QString coinFiatValue)
 {
-    ui->txtCoinFiatValue->setText(coinValue);
+    ui->txtCoinValue->setText(coinValue);
+    ui->txtCoinFiatValue->setText(coinFiatValue);
 }
