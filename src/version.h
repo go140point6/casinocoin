@@ -29,13 +29,13 @@ static const std::string COIN_NAME_DISPLAY("CasinoCoin");
 // network protocol versioning
 //
 
-static const int PROTOCOL_VERSION = 70004;
+static const int PROTOCOL_VERSION = 80001;
 
 // intial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
 
 // disconnect from peers older than this proto version
-static const int MIN_PEER_PROTO_VERSION = 70004; // TODO: Change to 70004 before block 445000 to force new client downloading and therefore doing the actual hard fork
+static const int MIN_PEER_PROTO_VERSION = 80001; // TODO: Change to 70004 before block 445000 to force new client downloading and therefore doing the actual hard fork
 
 // nTime field added to CAddress, starting with this version;
 // if possible, avoid requesting addresses nodes older than this

@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = casinocoin-qt
-VERSION = 2.1.0.0
+VERSION = 3.0.0.0
 INCLUDEPATH += src src/json src/qt
 QT += core gui network widgets qml quick
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE USE_IPV6
