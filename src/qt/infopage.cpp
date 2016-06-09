@@ -8,17 +8,21 @@
 #include "main.h"
 #include "overviewpage.h"
 #include "qtquick_controls/cpp/guiexchangeswidget.h"
+#include "twitter/twitterwidget.h"
 
 using namespace std;
 
 InfoPage::InfoPage(QWidget *parent) :
     QDialog(parent),
 	ui(new Ui::InfoPage),
-	exchangesWidget( 0 )
+    exchangesWidget( 0 ),
+    twitterWidget( 0 )
 {
     ui->setupUi(this);
     ui->coinInfoBox->setMinimumHeight(250);
+    ui->twitterFeedBox->setMinimumHeight(250);
     ui->exchangeInfoBox->setMinimumHeight(250);
+    createTwitterWidget();
 	createExchangesWidget();
 }
 
@@ -101,6 +105,12 @@ InfoPage::~InfoPage()
 	delete ui;
 }
 
+void InfoPage::createTwitterWidget()
+{
+    twitterWidget = new TwitterWidget( this );
+    ui->verticalLayoutTwitter->addWidget( twitterWidget->dockQmlToWidget() );
+}
+
 void InfoPage::createExchangesWidget()
 {
 	exchangesWidget = new GUIExchangesWidget( this );
@@ -108,8 +118,9 @@ void InfoPage::createExchangesWidget()
 	ui->verticalLayoutExchanges->addWidget( exchangesWidget->dockQmlToWidget() );
 }
 
-void InfoPage::setCoinValues(QString coinValue, QString coinFiatValue)
+void InfoPage::setCoinValues(QString coinValue, QString coinFiatValue, QString marketCapital)
 {
     ui->txtCoinValue->setText(coinValue);
     ui->txtCoinFiatValue->setText(coinFiatValue);
+    ui->txtEstimatedMarketCapital->setText(marketCapital);
 }

@@ -40,7 +40,7 @@ public slots:
 
 signals:
     void transactionClicked(const QModelIndex &index);
-    void coinValueChanged(const QString coinValue, const QString formattedCoinFiatValue);
+    void coinValueChanged(const QString coinValue, const QString formattedCoinFiatValue, const QString marketCapital);
 
 private:
     Ui::OverviewPage *ui;

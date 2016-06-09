@@ -6,6 +6,7 @@
 class WalletModel;
 class ClientModel;
 class GUIExchangesWidget;
+class TwitterWidget;
 
 namespace Ui {
 class InfoPage;
@@ -21,7 +22,7 @@ public slots:
     /** Set number of blocks shown in the UI */
     void setNumBlocks(int count, int countOfPeers);
     /** Set coin values */
-    void setCoinValues(const QString coinValue, const QString coinFiatValue);
+    void setCoinValues(const QString coinValue, const QString coinFiatValue, const QString marketCapital);
 
 public:
     explicit InfoPage(QWidget *parent = 0);
@@ -34,8 +35,10 @@ private:
     WalletModel *walletModel;
     ClientModel *clientModel;
 	GUIExchangesWidget* exchangesWidget;
+    TwitterWidget* twitterWidget;
 
-	void createExchangesWidget();
+    void createTwitterWidget();
+    void createExchangesWidget();
     double GetNetworkHashRate(int lookup, int height);
 };
 

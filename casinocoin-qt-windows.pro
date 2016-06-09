@@ -220,7 +220,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/qtquick_controls/cpp/qmlexchangeslistmodel.h \
     src/qt/qtquick_controls/cpp/qmlexchangeslistitem.h \
     src/qt/qtquick_controls/cpp/guiexchangeslistview.h \
-    src/qt/qtquick_controls/cpp/guiexchangescontrol.h
+    src/qt/qtquick_controls/cpp/guiexchangescontrol.h \
+    src/qt/twitter/twitterwidget.h
 
 SOURCES += src/qt/bitcoin.cpp \
     src/qt/bitcoingui.cpp \
@@ -321,7 +322,8 @@ SOURCES += src/qt/bitcoin.cpp \
     src/qt/qtquick_controls/cpp/qmlexchangeslistmodel.cpp \
     src/qt/qtquick_controls/cpp/qmlexchangeslistitem.cpp \
     src/qt/qtquick_controls/cpp/guiexchangeslistview.cpp \
-    src/qt/qtquick_controls/cpp/guiexchangescontrol.cpp
+    src/qt/qtquick_controls/cpp/guiexchangescontrol.cpp \
+    src/qt/twitter/twitterwidget.cpp
 
 RESOURCES += src/qt/bitcoin.qrc
 
@@ -357,7 +359,8 @@ OTHER_FILES += README.md \
     src/qt/qtquick_controls/qml/QmlGUIExchangesWindow.qml \
     src/qt/qtquick_controls/qml/QmlGUIMenuToolbarWindow.qml \
     src/qt/qtquick_controls/qml/QmlGUIMenuToolbarListView.qml \
-    src/qt/qtquick_controls/qml/QmlGUIMenuToolbarControl.qml
+    src/qt/qtquick_controls/qml/QmlGUIMenuToolbarControl.qml \
+    src/qt/twitter/*.qml
 
 DISTFILES += \
     QmlImports.qml

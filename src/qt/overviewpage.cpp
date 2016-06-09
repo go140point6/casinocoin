@@ -284,10 +284,13 @@ void OverviewPage::updateFiatBalance(int currency)
         QString conversionCurrency = QString("Price").append(Currencies::name(currency));
         QString coinValue = QString::number( coinInformation.find("PriceBTC").value().toDouble(), 'f', 8 );
         double currencyValue = coinInformation.find(conversionCurrency).value().toDouble();
+        double marketCapValue = coinInformation.find("MarketCapital").value().toDouble();
         // create formated fiat value
         QString formattedFiatValue = Currencies::format(currency, currencyValue, true, 4, false);
+        // create formatted market capital value
+        QString formattedMarketCapital = Currencies::format(Currencies::USD, marketCapValue, true, 2, false);
         // emit signal for change value
-        emit coinValueChanged(coinValue, formattedFiatValue);
+        emit coinValueChanged(coinValue, formattedFiatValue, formattedMarketCapital);
         // calculate and set fiat balance
         double fiatBalance = currentBalance * currencyValue;
         QString fiatBalanceString = Currencies::format(currency,fiatBalance,true, 2, true);
