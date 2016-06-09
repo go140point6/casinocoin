@@ -4,6 +4,7 @@
 #include "clientmodel.h"
 #include "bitcoinrpc.h"
 #include <QDateTime>
+#include <QDebug>
 #include "bitcoinunits.h"
 #include "main.h"
 #include "overviewpage.h"
@@ -55,7 +56,10 @@ void InfoPage::setNumBlocks(int count, int countOfPeers)
     // block height changed so update all possible values as well
     if(clientModel)
     {
-        ui->txtLastBlockTime->setText(clientModel->getLastBlockDate().toString());
+        QDateTime blockTime = clientModel->getLastBlockDate().toTimeSpec(Qt::UTC);
+        QString formattedBlockTime = blockTime.toString("dd-MM-yyyy HH:mm:ss");
+        formattedBlockTime.append(" UTC");
+        ui->txtLastBlockTime->setText(formattedBlockTime);
         ui->txtDifficulty->setText(QString::number(GetDifficulty()));
         ui->txtCoinSupply->setText(BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, GetTotalCoinSupply(count, false)));
         double megaHash = GetNetworkHashRate(-1, count) / 1000000;
