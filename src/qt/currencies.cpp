@@ -16,6 +16,10 @@ QList<Currencies::FiatCurrencyID> Currencies::availableCurrencies()
     currencylist.append(CNY);
     currencylist.append(JPY);
     currencylist.append(RUB);
+    currencylist.append(CAD);
+    currencylist.append(GBP);
+    currencylist.append(AUD);
+    currencylist.append(NZD);
     return currencylist;
 }
 
@@ -28,6 +32,10 @@ bool Currencies::valid(int currency)
     case CNY:
     case JPY:
     case RUB:
+    case CAD:
+    case GBP:
+    case AUD:
+    case NZD:
         return true;
     default:
         return false;
@@ -43,6 +51,10 @@ QString Currencies::name(int currency)
     case CNY: return QString("CNY");
     case JPY: return QString("JPY");
     case RUB: return QString("RUB");
+    case CAD: return QString("CAD");
+    case GBP: return QString("GBP");
+    case AUD: return QString("AUD");
+    case NZD: return QString("NZD");
     default: return QString("???");
     }
 }
@@ -51,11 +63,15 @@ QString Currencies::description(int currency)
 {
     switch(currency)
     {
-    case USD: return QString("US Dollars");
+    case USD: return QString("US Dollar");
     case EUR: return QString("European Euro");
     case CNY: return QString("Chinese Yuan");
     case JPY: return QString("Japanese Yen");
     case RUB: return QString("Russian Ruble");
+    case CAD: return QString("Canadian Dollar");
+    case GBP: return QString("British Pound");
+    case AUD: return QString("Australian Dollar");
+    case NZD: return QString("New Zealand Dollar");
     default: return QString("???");
     }
 }
@@ -69,6 +85,10 @@ QString Currencies::symbol(int currency)
     case CNY: return QString("¥");
     case JPY: return QString("¥");
     case RUB: return QString("₽");
+    case CAD: return QString("$");
+    case GBP: return QString("£");
+    case AUD: return QString("$");
+    case NZD: return QString("$");
     default: return QString("$");
     }
 }
