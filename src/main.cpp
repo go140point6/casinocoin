@@ -1109,16 +1109,16 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
     }
 
     // Permantently reduce the number of mined coins to 10 after block 575000
-    // Permantently reduce the number of minded coins to 1 after block 1750000
-        // coin supply at that height = 40327215
-        // Blocks until max coin supply -> 63000000 - 40327215 = 22672785
-        // New height for reduction to 0 coins -> 1750000 + 22672785 = 24422785
+    // Permantently reduce the number of minded coins to 1 after block 1575000
+        // coin supply at that height = 38577206
+        // Blocks until max coin supply -> 63000000 - 38577206 = 24422794
+        // New height for reduction to 0 coins -> 1575000 + 24422794 = 25997794
     if(nHeight > 575000){
-        if(nHeight < 1750000)
+        if(nHeight < 1575000)
         {
             nSubsidy = 10 * COIN;
         }
-        else if(nHeight >= 1750000 && nHeight <= 24422785){
+        else if(nHeight >= 1575000 && nHeight <= 25997794){
             nSubsidy = 1 * COIN;
         }
 	    else
@@ -3502,9 +3502,9 @@ void static ProcessGetData(CNode* pfrom)
 
 bool static CheckValidClientVersion(int clientVersion)
 {
-    // From block 1750000 onwards version must be 80001 (MIN_PEER_PROTO_VERSION)
+    // From block 1575000 onwards version must be 80001 (MIN_PEER_PROTO_VERSION)
     // Before that version was 70004
-    if(pindexBest->nHeight >= 1750000)
+    if(pindexBest->nHeight >= 1575000)
     {
         if(clientVersion < MIN_PEER_PROTO_VERSION)
             return false;
