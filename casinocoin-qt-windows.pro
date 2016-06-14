@@ -16,6 +16,8 @@ BOOST_INCLUDE_PATH=C:/msys64/usr/src/deps32/boost_1_60_0
 BDB_INCLUDE_PATH=C:/msys64/usr/src/deps32/db-4.8.30.NC/build_unix
 BDB_LIB_PATH=C:/msys64/usr/src/deps32/db-4.8.30.NC/build_unix
 BDB_LIB_SUFFIX=-4.8
+OPENSSL_INCLUDE_PATH=C:/msys64/usr/src/deps32/openssl-1.0.2g/include
+OPENSSL_LIB_PATH=C:/msys64/usr/src/deps32/openssl-1.0.2g
 MINIUPNPC_INCLUDE_PATH=C:/msys64/usr/src/deps32/miniupnpc-1.9/include
 MINIUPNPC_LIB_PATH=C:/msys64/usr/src/deps32/miniupnpc-1.9
 QRENCODE_INCLUDE_PATH=C:/msys64/usr/src/deps32/qrencode-3.4.4
@@ -424,8 +426,8 @@ RC_FILE = src/qt/res/bitcoin-qt.rc
 }
 
 # Set libraries and includes at end, to use platform-defined defaults if not overridden
-INCLUDEPATH += $$BDB_INCLUDE_PATH $$QRENCODE_INCLUDE_PATH $$BOOST_INCLUDE_PATH
-LIBS += $$join(BDB_LIB_PATH,,-L,) $$join(QRENCODE_LIB_PATH,,-L,) $$join(BOOST_LIB_PATH,,-L,)
+INCLUDEPATH += $$BDB_INCLUDE_PATH $$QRENCODE_INCLUDE_PATH $$BOOST_INCLUDE_PATH $$OPENSSL_INCLUDE_PATH
+LIBS += $$join(BDB_LIB_PATH,,-L,) $$join(QRENCODE_LIB_PATH,,-L,) $$join(BOOST_LIB_PATH,,-L,) $$join(OPENSSL_LIB_PATH,,-L,)
 LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX -lpthread
 # -lgdi32 has to happen after -lcrypto (see  #681)
 LIBS += -lws2_32 -lole32 -lmswsock -loleaut32 -luuid -lgdi32 -lshlwapi

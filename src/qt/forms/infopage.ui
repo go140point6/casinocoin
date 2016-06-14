@@ -39,7 +39,7 @@
     <widget class="QFrame" name="coinInfoBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>3</horstretch>
+       <horstretch>4</horstretch>
        <verstretch>1</verstretch>
       </sizepolicy>
      </property>
@@ -371,7 +371,7 @@
     <widget class="QFrame" name="twitterFeedBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>2</horstretch>
+       <horstretch>3</horstretch>
        <verstretch>1</verstretch>
       </sizepolicy>
      </property>

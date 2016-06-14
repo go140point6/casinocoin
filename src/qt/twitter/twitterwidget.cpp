@@ -32,7 +32,7 @@ QWidget* TwitterWidget::dockQmlToWidget()
         pPlaceHolder = QWidget::createWindowContainer( pTwitterWindow, this );
 		if ( pPlaceHolder )
 		{
-            pPlaceHolder->setMinimumSize( 500, 170 );
+            pPlaceHolder->setMinimumSize( 300, 150 );
 			pPlaceHolder->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 		}
 	}
