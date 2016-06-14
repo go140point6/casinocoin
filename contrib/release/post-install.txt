@@ -1,0 +1,1 @@
+The wallet has been succesfully installed. Please be aware that this software makes use of OpenGL v2 rendering. On older machines or Virtual Machines that do not have recent video drivers this can cause graphics rendering problems. If this is the case then add the following parameter to your environment settings: QT_OPENGL_DLL = opengl32sw.dll
