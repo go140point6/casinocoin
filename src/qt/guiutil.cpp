@@ -383,7 +383,8 @@ boost::filesystem::path static GetAutostartDir()
 
 boost::filesystem::path static GetAutostartFilePath()
 {
-    return GetAutostartDir() / ""+ COIN_NAME + ".desktop";
+    std::string filename (""+ COIN_NAME + ".desktop");
+    return GetAutostartDir() / filename;
 }
 
 bool GetStartOnSystemStartup()

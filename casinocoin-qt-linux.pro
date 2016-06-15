@@ -6,6 +6,7 @@ QT += core gui network widgets qml quick
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE USE_IPV6 __NO_SYSTEM_INCLUDES
 CONFIG += no_include_pwd
 CONFIG += thread
+CONFIG += static
 
 BOOST_LIB_SUFFIX=-mt
 BOOST_INCLUDE_PATH=/home/ubuntu/deps/boost_1_60_0
