@@ -1,7 +1,6 @@
 TEMPLATE = app
 TARGET = casinocoin-qt
-macx:TARGET = "CasinoCoin-Qt"
-VERSION = 2.0.0.0
+VERSION = 3.0.0.0
 INCLUDEPATH += src src/json src/qt
 QT += core gui network widgets qml quick
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE USE_IPV6 __NO_SYSTEM_INCLUDES
@@ -9,16 +8,17 @@ CONFIG += no_include_pwd
 CONFIG += thread
 CONFIG += static
 
-BOOST_INCLUDE_PATH=/home/ubuntu/CSC/deps/linux/boost_1_55_0
-BOOST_LIB_PATH=/home/ubuntu/CSC/deps/linux/boost_1_55_0/stage/lib
-BDB_INCLUDE_PATH=/home/ubuntu/CSC/deps/linux/db-4.8.30/build_unix
-BDB_LIB_PATH=/home/ubuntu/CSC/deps/linux/db-4.8.30/build_unix
-OPENSSL_INCLUDE_PATH=/home/ubuntu/CSC/deps/linux/openssl-1.0.2d/include
-OPENSSL_LIB_PATH=/home/ubuntu/CSC/deps/linux/openssl-1.0.2d
-MINIUPNPC_INCLUDE_PATH=/home/ubuntu/CSC/deps/linux/
-MINIUPNPC_LIB_PATH=/home/ubuntu/CSC/deps/linux/miniupnpc
-QRENCODE_INCLUDE_PATH=/home/ubuntu/CSC/deps/linux/qrencode-3.4.4
-QRENCODE_LIB_PATH=/home/ubuntu/CSC/deps/linux/qrencode-3.4.4/.libs
+BOOST_LIB_SUFFIX=-mt
+BOOST_INCLUDE_PATH=/home/ubuntu/deps/boost_1_60_0
+BOOST_LIB_PATH=/home/ubuntu/deps/boost_1_60_0/stage/lib
+BDB_INCLUDE_PATH=/home/ubuntu/deps/db-5.1.29.NC/build_unix
+BDB_LIB_PATH=/home/ubuntu/deps/db-5.1.29.NC/build_unix
+OPENSSL_INCLUDE_PATH=/home/ubuntu/deps/openssl-1.0.2g/include
+OPENSSL_LIB_PATH=/home/ubuntu/deps/openssl-1.0.2g
+MINIUPNPC_INCLUDE_PATH=/home/ubuntu/deps/miniupnpc-1.9
+MINIUPNPC_LIB_PATH=/home/ubuntu/deps/miniupnpc-1.9
+QRENCODE_INCLUDE_PATH=/home/ubuntu/deps/qrencode-3.4.4
+QRENCODE_LIB_PATH=/home/ubuntu/deps/qrencode-3.4.4/.libs
 
 OBJECTS_DIR = build
 MOC_DIR = build
@@ -109,7 +109,6 @@ DEFINES += HAVE_BUILD_INFO
 QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter -Wno-strict-aliasing -Wstack-protector
 
 QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-local-typedefs
-
 
 ##### Start Project Files #####
 
@@ -229,7 +228,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/qtquick_controls/cpp/qmlexchangeslistmodel.h \
     src/qt/qtquick_controls/cpp/qmlexchangeslistitem.h \
     src/qt/qtquick_controls/cpp/guiexchangeslistview.h \
-    src/qt/qtquick_controls/cpp/guiexchangescontrol.h
+    src/qt/qtquick_controls/cpp/guiexchangescontrol.h \
+    src/qt/twitter/twitterwidget.h
 
 SOURCES += src/qt/bitcoin.cpp \
     src/qt/bitcoingui.cpp \
@@ -330,7 +330,8 @@ SOURCES += src/qt/bitcoin.cpp \
     src/qt/qtquick_controls/cpp/qmlexchangeslistmodel.cpp \
     src/qt/qtquick_controls/cpp/qmlexchangeslistitem.cpp \
     src/qt/qtquick_controls/cpp/guiexchangeslistview.cpp \
-    src/qt/qtquick_controls/cpp/guiexchangescontrol.cpp
+    src/qt/qtquick_controls/cpp/guiexchangescontrol.cpp \
+    src/qt/twitter/twitterwidget.cpp
 
 RESOURCES += src/qt/bitcoin.qrc
 
@@ -349,7 +350,6 @@ FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/pryptopage.ui \
     src/qt/forms/infopage.ui
 
-# "Other files" to show in Qt Creator
 OTHER_FILES += README.md \
     doc/*.rst \
     doc/*.txt \
@@ -367,7 +367,8 @@ OTHER_FILES += README.md \
     src/qt/qtquick_controls/qml/QmlGUIExchangesWindow.qml \
     src/qt/qtquick_controls/qml/QmlGUIMenuToolbarWindow.qml \
     src/qt/qtquick_controls/qml/QmlGUIMenuToolbarListView.qml \
-    src/qt/qtquick_controls/qml/QmlGUIMenuToolbarControl.qml
+    src/qt/qtquick_controls/qml/QmlGUIMenuToolbarControl.qml \
+    src/qt/twitter/*.qml
 
 DISTFILES += \
     QmlImports.qml

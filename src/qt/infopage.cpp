@@ -4,33 +4,32 @@
 #include "clientmodel.h"
 #include "bitcoinrpc.h"
 #include <QDateTime>
+#include <QDebug>
 #include "bitcoinunits.h"
 #include "main.h"
 #include "overviewpage.h"
 #include "qtquick_controls/cpp/guiexchangeswidget.h"
+#include "twitter/twitterwidget.h"
 
 using namespace std;
 
 InfoPage::InfoPage(QWidget *parent) :
     QDialog(parent),
 	ui(new Ui::InfoPage),
-	exchangesWidget( 0 )
+    exchangesWidget( 0 ),
+    twitterWidget( 0 )
 {
     ui->setupUi(this);
     ui->coinInfoBox->setMinimumHeight(250);
+    ui->twitterFeedBox->setMinimumHeight(250);
     ui->exchangeInfoBox->setMinimumHeight(250);
+    createTwitterWidget();
 	createExchangesWidget();
 }
 
 void InfoPage::setWalletModel(WalletModel *model)
 {
     this->walletModel = model;
-    if(model)
-    {
-        // subscribe to transaction changes
-        connect(model, SIGNAL(numTransactionsChanged(int)), this, SLOT(setNumTransactions(int)));
-        setNumTransactions(model->getNumTransactions());
-    }
 }
 
 void InfoPage::setClientModel(ClientModel *model)
@@ -57,17 +56,15 @@ void InfoPage::setNumBlocks(int count, int countOfPeers)
     // block height changed so update all possible values as well
     if(clientModel)
     {
-        ui->txtLastBlockTime->setText(clientModel->getLastBlockDate().toString());
+        QDateTime blockTime = clientModel->getLastBlockDate().toTimeSpec(Qt::UTC);
+        QString formattedBlockTime = blockTime.toString("dd-MM-yyyy HH:mm:ss");
+        formattedBlockTime.append(" UTC");
+        ui->txtLastBlockTime->setText(formattedBlockTime);
         ui->txtDifficulty->setText(QString::number(GetDifficulty()));
         ui->txtCoinSupply->setText(BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, GetTotalCoinSupply(count, false)));
         double megaHash = GetNetworkHashRate(-1, count) / 1000000;
         ui->txtHashRate->setText(QString::number(megaHash,'f',0).append(" MHash/sec"));
     }
-}
-
-void InfoPage::setNumTransactions(int count)
-{
-    ui->txtTransactionCount->setText(QString::number(count));
 }
 
 double InfoPage::GetNetworkHashRate(int lookup, int height) {
@@ -112,6 +109,12 @@ InfoPage::~InfoPage()
 	delete ui;
 }
 
+void InfoPage::createTwitterWidget()
+{
+    twitterWidget = new TwitterWidget( this );
+    ui->verticalLayoutTwitter->addWidget( twitterWidget->dockQmlToWidget() );
+}
+
 void InfoPage::createExchangesWidget()
 {
 	exchangesWidget = new GUIExchangesWidget( this );
@@ -119,7 +122,9 @@ void InfoPage::createExchangesWidget()
 	ui->verticalLayoutExchanges->addWidget( exchangesWidget->dockQmlToWidget() );
 }
 
-void InfoPage::setCoinFiatValue(QString coinValue)
+void InfoPage::setCoinValues(QString coinValue, QString coinFiatValue, QString marketCapital)
 {
-    ui->txtCoinFiatValue->setText(coinValue);
+    ui->txtCoinValue->setText(coinValue);
+    ui->txtCoinFiatValue->setText(coinFiatValue);
+    ui->txtEstimatedMarketCapital->setText(marketCapital);
 }

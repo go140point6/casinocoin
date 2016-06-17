@@ -212,7 +212,7 @@ GUIExchangesListView
 									{
 										id: id_exchangeTimeDescription
 										anchors.left: id_exchangeLastUpdateTime.left
-										text: qsTr( "Time:" )
+                                        text: qsTr( "Updated:" )
 										color: GUI20Skin.colorToolbarMainGradientEnd
 										width: id_exchangeLastUpdateTime.width / 3
 									}
@@ -220,7 +220,7 @@ GUIExchangesListView
 									{
 										id: id_exchangeTimeValue
 										anchors.left: id_exchangeTimeDescription.right
-										text: qsTr( m_lastUpdateTime )
+                                        text: m_lastUpdateTime + " UTC"
                                         font.bold: true
 										color: GUI20Skin.colorTextActive
 									}

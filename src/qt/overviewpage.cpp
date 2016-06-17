@@ -219,6 +219,10 @@ void OverviewPage::setWalletModel(WalletModel *model)
 
         // set visibility of adverts widget
         updateDisplayPromotions(model->getOptionsModel()->getDisplayPromotions());
+
+        // subscribe to transaction changes
+        connect(model, SIGNAL(numTransactionsChanged(int)), this, SLOT(setNumTransactions(int)));
+        setNumTransactions(model->getNumTransactions());
     }
 
     // update the display unit, to not use the default ("BTC")
@@ -263,6 +267,7 @@ void OverviewPage::updateCoinInfoFromWeb( JsonCoinInfoParser* coinInfoParser )
 {
     qDebug() << "CoinInfo ID: " << coinInfoParser->getCoinInfo().find("ID").value().toDouble();
     qDebug() << "CoinInfo InfoTime: " <<coinInfoParser->getCoinInfo().find("InfoTime").value().toString();
+    qDebug() << "CoinInfo CoinValue: " << QString::number( coinInfoParser->getCoinInfo().find("PriceBTC").value().toDouble(), 'f', 8 );
     // save the coin information
     coinInformation = coinInfoParser->getCoinInfo();
     // calculate and set the estimated fiat balance
@@ -277,10 +282,15 @@ void OverviewPage::updateFiatBalance(int currency)
     if(!coinInformation.isEmpty())
     {
         QString conversionCurrency = QString("Price").append(Currencies::name(currency));
+        QString coinValue = QString::number( coinInformation.find("PriceBTC").value().toDouble(), 'f', 8 );
         double currencyValue = coinInformation.find(conversionCurrency).value().toDouble();
+        double marketCapValue = coinInformation.find("MarketCapital").value().toDouble();
+        // create formated fiat value
+        QString formattedFiatValue = Currencies::format(currency, currencyValue, true, 4, false);
+        // create formatted market capital value
+        QString formattedMarketCapital = Currencies::format(Currencies::USD, marketCapValue, true, 2, false);
         // emit signal for change value
-        QString coinValue = Currencies::format(currency, currencyValue, true, 4, false);
-        emit coinFiatValueChanged(coinValue);
+        emit coinValueChanged(coinValue, formattedFiatValue, formattedMarketCapital);
         // calculate and set fiat balance
         double fiatBalance = currentBalance * currencyValue;
         QString fiatBalanceString = Currencies::format(currency,fiatBalance,true, 2, true);
@@ -299,6 +309,11 @@ void OverviewPage::updateDisplayPromotions(bool checked)
             pAdvertWidget->setVisible( checked );
         }
     }
+}
+
+void OverviewPage::setNumTransactions(int count)
+{
+    ui->txtTransactionCount->setText(QString::number(count));
 }
 
 OverviewPage::~OverviewPage()

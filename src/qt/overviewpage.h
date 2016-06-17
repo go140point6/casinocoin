@@ -36,10 +36,11 @@ public:
 
 public slots:
     void setBalance(qint64 balance, qint64 unconfirmedBalance, qint64 immatureBalance);
+    void setNumTransactions(int count);
 
 signals:
     void transactionClicked(const QModelIndex &index);
-    void coinFiatValueChanged(const QString formattedCoinFiatValue);
+    void coinValueChanged(const QString coinValue, const QString formattedCoinFiatValue, const QString marketCapital);
 
 private:
     Ui::OverviewPage *ui;

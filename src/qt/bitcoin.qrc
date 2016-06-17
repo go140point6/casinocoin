@@ -135,5 +135,11 @@
         <file>qtquick_controls/qml/QmlGUIExchangesWindow.qml</file>
         <file>qtquick_controls/qml/QmlGUIExchangesListView.qml</file>
         <file>qtquick_controls/qml/QmlGUIExchangesControl.qml</file>
+        <file>twitter/FlipBar.qml</file>
+        <file>twitter/TweetDelegate.qml</file>
+        <file>twitter/tweetsearch.js</file>
+        <file>twitter/TweetsModel.qml</file>
+        <file>twitter/CasinocoinTwitterFeed.qml</file>
+        <file>twitter/resources/anonymous.png</file>
     </qresource>
 </RCC>

@@ -16,6 +16,10 @@ public:
         CNY,
         JPY,
         RUB,
+        CAD,
+        GBP,
+        AUD,
+        NZD,
     };
 
     //! Get list of currencies, for drop-down box

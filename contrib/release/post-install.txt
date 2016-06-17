@@ -1,0 +1,10 @@
+The wallet has been succesfully installed. 
+
+Please be aware of the following two requirements.
+
+- This software makes use of OpenSSL libraries. They may not yet be available on your machine. If you encounter issues with Redeeming Prypto codes or showing the Twitter feed on the Info page they are missing. Local laws may prohibit installing them so they are not installed with the wallet. In that case you must install the OpenSSL libraries manually. You can download and install the light version from https://slproweb.com/products/Win32OpenSSL.html 
+
+- This software makes use of OpenGL v2 rendering. On older machines or Virtual Machines that do not have recent video drivers this can cause graphics rendering problems. If this is the case you can enable a software renderer. To do so add the following parameter to your environment settings via Control Panel -> System -> Advanced System Settings -> Environment Variables: 
+
+Variable: QT_OPENGL_DLL
+Value: opengl32sw.dll
