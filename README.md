@@ -1,5 +1,5 @@
-<h2>Wallet 2.0.1.0 Release available</h2>
-[Click here to download the most recent wallet version -> 2.0.1.0 (Updated on December, 11 2015)](https://github.com/casinocoin/casinocoin/releases/tag/2.0.1.0 "Click to go to releases page")
+<h2>Wallet 3.0.0.0 Release available</h2>
+[Click here to download the most recent wallet version -> 3.0.0.0 (Updated on June, 17 2016)](https://github.com/casinocoin/casinocoin/releases/tag/3.0.0.0 "Click to go to releases page")
 
 <p align="center"><img src="https://raw.github.com/transcoder/CasinoCoin/master/src/qt/res/images/logo.png" /></p>
 
@@ -35,7 +35,7 @@ Technical Specifications
  - 30 second block time targets
  - ~63 million total coins
  - new digishield difficulty retargetting system (from block 445000) 
- - 50 coins per block, permanent reduction to 10 coins per block after block 575000
+ - 50 coins per block, permanent reduction to 1 coins per block after block 1750000
  - fair launch, absolutely no premine
 
 Casinocoin Mailing Lists
