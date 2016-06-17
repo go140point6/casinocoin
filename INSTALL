@@ -1,5 +1,8 @@
 Building CasinoCoin
 
+Please visit the Wiki for details on building CasinoCoin-qt and Casinocoind
+https://github.com/casinocoin/casinocoin/wiki
+
 See doc/readme-qt.rst for instructions on building CasinoCoin-Qt,
 the intended-for-end-users, nice-graphical-interface, reference
 implementation of CasinoCoin.
