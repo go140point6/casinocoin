@@ -1,0 +1,16 @@
+[Unit]
+Description=Casinocoin Daemon Service
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+User=ubuntu
+Group=ubuntu
+PIDFile=/opt/CSC/data/casinocoind.pid
+EnvironmentFile=/etc/systemd/casinocoind.env
+ExecStart=/usr/bin/casinocoind -daemon -datadir=${CASINOCOIND_DATADIR} -conf=${CASINOCOIND_CONFIGFILE} -dbcache=${CASINOCOIND_CACHESIZE}
+ExecStop=/usr/bin/casinocoind -conf=${CASINOCOIND_CONFIGFILE} stop
+
+[Install]
+WantedBy=multi-user.target
