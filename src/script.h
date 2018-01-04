@@ -14,6 +14,8 @@
 #include "keystore.h"
 #include "bignum.h"
 
+typedef std::vector<unsigned char> valtype;
+
 class CCoins;
 class CTransaction;
 
